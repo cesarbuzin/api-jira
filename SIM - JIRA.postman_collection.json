@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "215970d5-5c82-4c59-b7a1-cc6a20adde13",
+		"name": "SIM - JIRA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30398885"
+	},
+	"item": [
+		{
+			"name": "Tasks por projeto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/tasks/projectTasks?project=PORTALB2B&dataInicial=2023-08-01&dataFinal=2023-08-31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"tasks",
+						"projectTasks"
+					],
+					"query": [
+						{
+							"key": "project",
+							"value": "PORTALB2B"
+						},
+						{
+							"key": "dataInicial",
+							"value": "2023-08-01"
+						},
+						{
+							"key": "dataFinal",
+							"value": "2023-08-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dados da task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/tasks/taskData?issue=PORTALB2B-809",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"tasks",
+						"taskData"
+					],
+					"query": [
+						{
+							"key": "issue",
+							"value": "PORTALB2B-809"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dados das tasks por projeto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/tasks/projectTasks?project=PORTALB2B&dataInicial=2023-08-01&dataFinal=2023-08-31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"tasks",
+						"projectTasks"
+					],
+					"query": [
+						{
+							"key": "project",
+							"value": "PORTALB2B"
+						},
+						{
+							"key": "dataInicial",
+							"value": "2023-08-01"
+						},
+						{
+							"key": "dataFinal",
+							"value": "2023-08-31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dados das tasks por usuário",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3333/tasks/userDataTasks?user=ALEX&dataInicial=2023-08-01&dataFinal=2023-08-31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3333",
+					"path": [
+						"tasks",
+						"userDataTasks"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "ALEX"
+						},
+						{
+							"key": "dataInicial",
+							"value": "2023-08-01"
+						},
+						{
+							"key": "dataFinal",
+							"value": "2023-08-31"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
