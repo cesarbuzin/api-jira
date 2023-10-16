@@ -4,9 +4,9 @@ import axios from 'axios'
 
 export default class JiraService {
 
-  username = 'simlabs@simrede.com.br'
+  username = ''
   password =
-    'ATATT3xFfGF0tr6C0Vo2KxLNrJYZMJeuI2lZdPErRGMeHIYxjflSHsbmU4j5CwyHlsEN1OQSyXWwMU2K1a7PuF8-kaZP5WLZ1QjHi1s3AaT-GO-Pr_NjrqLZ1smT2pPkKyucchPohRquH8vCZGegD-BQtB5BcWWW0XoMfIelZho_TeZ57NxlAf0=E2AB2B53'
+    ''
   basicAuth = 'Basic ' + btoa(this.username + ':' + this.password)
 
   public async getUserDataTasks(project: String, user: String, dataInicial: String, dataFinal: String): Promise<TaskDTO[]> {
