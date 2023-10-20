@@ -5,5 +5,6 @@ Route.group(() => {
   Route.get('/taskData', 'TasksController.taskData')
   Route.get('/projectDataTasks', 'TasksController.projectDataTasks')
   Route.get('/userDataTasks', 'TasksController.userDataTasks')
+  Route.get('/projectDataTasksCSV', 'TasksController.projectDataTasksCSV')
 })
   .prefix('/tasks')
