@@ -84,9 +84,10 @@ export default class JiraService {
 
     const descricao =  response.data.fields.summary
     const tipo = response.data.fields.issuetype.name;
-    const criacao = response.data.fields.created
+    const criacao = response.data.fields.created;
+    const status = response.data.fields.status.name?.toString().toUpperCase();
 
-    return {descricao: descricao, tipo: tipo, criacao: criacao}
+    return {descricao: descricao, tipo: tipo, criacao: criacao, statusAtual: status}
 
   }
 
@@ -247,6 +248,7 @@ export default class JiraService {
       descricao: descricao,
       concluida: done,
       tipo: taskDetail.tipo,
+      statusAtual: taskDetail.statusAtual,
       tempoTotal: tempoTotal,
       tempoTotalString: this.convertMsToTime(tempoTotal),
       quantidadeRetornos: qtdRetrabalho,
@@ -464,5 +466,312 @@ export default class JiraService {
 
   padTo2Digits(num:number) {
     return num.toString().padStart(2, '0');
+  }
+
+  public async getSprintTasks(
+    project: String | null,
+    sprint: String,
+  ): Promise<String[]> {
+    const headers = { Accept: 'application/json', Authorization: this.basicAuth }
+
+    var projectJql: String = project ? `project = "${project}" AND ` : ''
+    var startAt = 0
+    var lenght = null
+    var tasksList: String[] = []
+
+    while(lenght == null || lenght > 0) {
+
+      const url = `https://simlabs.atlassian.net/rest/api/3/search?maxResults=100&startAt=${startAt}&jql=${projectJql}sprint=${sprint}`
+
+      var response = await axios({ method: 'get', url: url, headers: headers })
+
+      if (response.status != 200) {
+        console.log(response)
+        throw new Error('Projeto não encontrado')
+      }
+
+      response.data.issues.forEach((status: { key: String }) => {
+        tasksList.push(status.key)
+      })
+
+      startAt+=100;
+      lenght = response.data.issues.length
+      console.log(lenght)
+    }
+
+    console.log(tasksList.length)
+
+    return tasksList
+  }
+
+  public async getSprintsTasks(
+    sprints: String,
+  ): Promise<String[]> {
+    const headers = { Accept: 'application/json', Authorization: this.basicAuth }
+
+    var projectJql: String = ''
+    var startAt = 0
+    var lenght = null
+    var tasksList: String[] = []
+    var sprintsList = sprints.replace('\'','').replace('\'','').split(',')
+    var sprintStr = '';
+    sprintsList.forEach(sprint => {
+      sprintStr += ` ${sprintStr.length==0?'':'or'} sprint = '${sprint}'`
+    });
+
+    while(lenght == null || lenght > 0) {
+
+      const url = `https://simlabs.atlassian.net/rest/api/3/search?maxResults=100&startAt=${startAt}&jql=${projectJql} ${sprintStr}`
+
+      var response = await axios({ method: 'get', url: url, headers: headers })
+
+      if (response.status != 200) {
+        console.log(response)
+        throw new Error('Projeto não encontrado')
+      }
+
+      response.data.issues.forEach((status: { key: String }) => {
+        tasksList.push(status.key)
+      })
+
+      startAt+=100;
+      lenght = response.data.issues.length
+      console.log(lenght)
+    }
+
+    console.log(tasksList.length)
+
+    return tasksList
+  }
+
+  async sprintDataTasks(project: String,user:String|null, sprint:String) {
+    var tasksList: String[] = await new JiraService().getSprintTasks(project, sprint);
+    var tasks:TaskDTO[] = [];
+
+    var qtdTarefas = 0;
+    var qtdTarefasRetrabalho = 0;
+    var qtdTarefasBugs = 0;
+    var qtdTarefasBugsRetrabalho = 0
+    var qtdTarefasMelhoria = 0;
+    var qtdTarefasMelhoriaRetrabalho = 0;
+    var tempoTarefasBugs = 0
+    var tempoTarefasMelhoria = 0
+    var tempoTarefas = 0
+    var tempoRetrabalho = 0
+    var tempoRetrabalhoTarefasBug = 0
+    var tempoRetrabalhoTarefasMelhoria = 0
+    var tempoPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0}
+    var tempoPorStatusString= {}
+    var tempoRetrabalhoPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0}
+    var tempoRetrabalhoPorStatusString= {}
+    var qtdRetornosTarefas = 0;
+    var qtdConcluidas = 0;
+
+    var tempoPorStatusTODO = 0
+    var tempoPorStatusANDAMENTO = 0
+    var tempoPorStatusREVIEW = 0
+    var tempoPorStatusDEPLOY_HOMOL = 0
+    var tempoPorStatusAGUARDANDO_TESTE = 0
+    var tempoPorStatusTESTE = 0
+    var tempoPorStatusDEPLOY_PROD = 0
+
+    var tempoRetrabalhoPorStatusTODO = 0
+    var tempoRetrabalhoPorStatusANDAMENTO = 0
+    var tempoRetrabalhoPorStatusREVIEW = 0
+    var tempoRetrabalhoPorStatusDEPLOY_HOMOL = 0
+    var tempoRetrabalhoPorStatusAGUARDANDO_TESTE = 0
+    var tempoRetrabalhoPorStatusTESTE = 0
+    var tempoRetrabalhoPorStatusDEPLOY_PROD = 0
+
+    var qtdPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0, DONE:0}
+
+    for(const task of tasksList) {
+      var data: TaskDataDTO = await new JiraService().getTaskData(task, null, null)
+
+      if(data.statusAtual === 'TAREFAS PENDENTES')
+        qtdPorStatus.TODO = qtdPorStatus.TODO+1
+      if(data.statusAtual === 'EM ANDAMENTO')
+        qtdPorStatus.ANDAMENTO = qtdPorStatus.ANDAMENTO+1
+      if(data.statusAtual === 'CODE REVIEW')
+        qtdPorStatus.REVIEW = qtdPorStatus.REVIEW+1
+      if(data.statusAtual === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO')
+        qtdPorStatus.DEPLOY_HOMOL = qtdPorStatus.DEPLOY_HOMOL+1
+      if(data.statusAtual === 'AGUARDANDO TESTE')
+        qtdPorStatus.AGUARDANDO_TESTE = qtdPorStatus.AGUARDANDO_TESTE+1
+      if(data.statusAtual === 'EM TESTE')
+        qtdPorStatus.TESTE = qtdPorStatus.TESTE+1
+      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO')
+        qtdPorStatus.DEPLOY_PROD = qtdPorStatus.DEPLOY_PROD+1
+      if(data.statusAtual === 'CONCLUÍDO')
+        qtdPorStatus.DONE = qtdPorStatus.DONE+1
+
+      var userPartTask = false;
+      if(user != null) {
+        for (var userTask of data.usuariosEnvolvidos) {
+          if (userTask.toLowerCase().indexOf(user.toLowerCase()) >= 0) {
+            userPartTask = true;
+            break
+          }
+        }
+      } else {
+        userPartTask = true;
+      }
+
+      if(userPartTask) {
+        tasks.push({task: task, data: data});
+
+        qtdTarefas++;
+
+        if(data.quantidadeRetornos > 0) {
+          qtdTarefasRetrabalho++;
+        }
+
+        qtdRetornosTarefas += data.quantidadeRetornos;
+
+        if(data.concluida) {
+          qtdConcluidas++;
+        }
+
+        if(data.tipo === 'Bug') {
+          qtdTarefasBugs++;
+          tempoTarefasBugs+= data.tempoTotal
+          tempoRetrabalhoTarefasBug+= data.tempoRetrabalho
+          if(data.quantidadeRetornos > 0) {
+          qtdTarefasBugsRetrabalho++;
+        }
+        } else {
+          qtdTarefasMelhoria++;
+          tempoTarefasMelhoria+= data.tempoTotal
+          tempoRetrabalhoTarefasMelhoria = data.tempoRetrabalho;
+          if(data.quantidadeRetornos > 0) {
+            qtdTarefasMelhoriaRetrabalho++;
+          }
+        }
+
+        tempoTarefas += data.tempoTotal
+        tempoRetrabalho += data.tempoRetrabalho
+        tempoPorStatusTODO += data.tempoPorStatus.TODO??0
+        tempoPorStatusANDAMENTO += data.tempoPorStatus.ANDAMENTO??0
+        tempoPorStatusREVIEW += data.tempoPorStatus.REVIEW??0
+        tempoPorStatusDEPLOY_HOMOL += data.tempoPorStatus.DEPLOY_HOMOL??0
+        tempoPorStatusAGUARDANDO_TESTE += data.tempoPorStatus.AGUARDANDO_TESTE??0
+        tempoPorStatusTESTE += data.tempoPorStatus.TESTE??0
+        tempoPorStatusDEPLOY_PROD += data.tempoPorStatus.DEPLOY_PROD??0
+
+        tempoRetrabalhoPorStatusTODO += data.tempoRetrabalhoPorStatus.TODO??0
+        tempoRetrabalhoPorStatusANDAMENTO += data.tempoRetrabalhoPorStatus.ANDAMENTO??0
+        tempoRetrabalhoPorStatusREVIEW += data.tempoRetrabalhoPorStatus.REVIEW??0
+        tempoRetrabalhoPorStatusDEPLOY_HOMOL += data.tempoRetrabalhoPorStatus.DEPLOY_HOMOL??0
+        tempoRetrabalhoPorStatusAGUARDANDO_TESTE += data.tempoRetrabalhoPorStatus.AGUARDANDO_TESTE??0
+        tempoRetrabalhoPorStatusTESTE += data.tempoRetrabalhoPorStatus.TESTE??0
+        tempoRetrabalhoPorStatusDEPLOY_PROD += data.tempoRetrabalhoPorStatus.DEPLOY_PROD??0
+      }
+    }
+
+    tempoPorStatus= {TODO:tempoPorStatusTODO,
+      ANDAMENTO:tempoPorStatusANDAMENTO,
+      REVIEW:tempoPorStatusREVIEW,
+      DEPLOY_HOMOL:tempoPorStatusDEPLOY_HOMOL,
+      AGUARDANDO_TESTE:tempoPorStatusAGUARDANDO_TESTE,
+      TESTE:tempoPorStatusTESTE,
+      DEPLOY_PROD:tempoPorStatusDEPLOY_PROD}
+
+    tempoPorStatusString= {TODO:new JiraService().convertMsToTime(tempoPorStatus.TODO),
+      ANDAMENTO:new JiraService().convertMsToTime(tempoPorStatus.ANDAMENTO),
+      REVIEW:new JiraService().convertMsToTime(tempoPorStatus.REVIEW),
+      DEPLOY_HOMOL:new JiraService().convertMsToTime(tempoPorStatus.DEPLOY_HOMOL),
+      AGUARDANDO_TESTE:new JiraService().convertMsToTime(tempoPorStatus.AGUARDANDO_TESTE),
+      TESTE:new JiraService().convertMsToTime(tempoPorStatus.TESTE),
+      DEPLOY_PROD:new JiraService().convertMsToTime(tempoPorStatus.DEPLOY_PROD),}
+
+      tempoRetrabalhoPorStatus= {TODO:tempoRetrabalhoPorStatusTODO,
+        ANDAMENTO:tempoRetrabalhoPorStatusANDAMENTO,
+        REVIEW:tempoRetrabalhoPorStatusREVIEW,
+        DEPLOY_HOMOL:tempoRetrabalhoPorStatusDEPLOY_HOMOL,
+        AGUARDANDO_TESTE:tempoRetrabalhoPorStatusAGUARDANDO_TESTE,
+        TESTE:tempoRetrabalhoPorStatusTESTE,
+        DEPLOY_PROD:tempoRetrabalhoPorStatusDEPLOY_PROD}
+
+    tempoRetrabalhoPorStatusString= {TODO:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.TODO),
+        ANDAMENTO:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.ANDAMENTO),
+        REVIEW:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.REVIEW),
+        DEPLOY_HOMOL:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.DEPLOY_HOMOL),
+        AGUARDANDO_TESTE:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.AGUARDANDO_TESTE),
+        TESTE:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.TESTE),
+        DEPLOY_PROD:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.DEPLOY_PROD),}
+
+    var indices = {
+    percentualTempoBugs: (tempoTarefasBugs * 100) / tempoTarefas,
+    percentualRetrabalhoDev: (tempoRetrabalhoPorStatus.ANDAMENTO * 100) / tempoPorStatus.ANDAMENTO,
+    percentualTempoEsperaReviewTecnico: (tempoRetrabalhoPorStatus.REVIEW * 100) / tempoTarefas,
+    percentualTempoEsperaDev: (tempoRetrabalhoPorStatus.TODO * 100) / tempoTarefas,
+    percentualTempoEsperaQa: (tempoRetrabalhoPorStatus.AGUARDANDO_TESTE * 100) / tempoTarefas,
+    percentualRetrabalhoQa: (tempoRetrabalhoPorStatus.TESTE * 100) / tempoPorStatus.TESTE,
+  }
+
+    return {
+      usuario: user != null ? user : 'Todos',
+      indices: indices,
+      qtdPorStatus: qtdPorStatus,
+      qtdTarefas: qtdTarefas,
+      qtdConcluidas: qtdConcluidas,
+      qtdTarefasRetrabalho: qtdTarefasRetrabalho,
+      qtdTarefasBugs: qtdTarefasBugs,
+      qtdTarefasMelhoria: qtdTarefasMelhoria,
+      qtdTarefasBugsRetrabalho: qtdTarefasBugsRetrabalho,
+      qtdTarefasMelhoriaRetrabalho: qtdTarefasMelhoriaRetrabalho,
+      qtdRetornosTarefas: qtdRetornosTarefas,
+      tempoTarefas: tempoTarefas,
+      tempoRetrabalho: tempoRetrabalho,
+      tempoTarefasBugs: tempoTarefasBugs,
+      tempoTarefasMelhoria: tempoTarefasMelhoria,
+      tempoRetrabalhoTarefasBug: tempoRetrabalhoTarefasBug,
+      tempoRetrabalhoTarefasMelhoria: tempoRetrabalhoTarefasMelhoria,
+      tempoTarefasString: new JiraService().convertMsToTime(tempoTarefas),
+      tempoRetrabalhoString: new JiraService().convertMsToTime(tempoRetrabalho),
+      tempoTarefasBugsString: new JiraService().convertMsToTime(tempoTarefasBugs),
+      tempoTarefasMelhoriaString: new JiraService().convertMsToTime(tempoTarefasMelhoria),
+      tempoRetrabalhoTarefasBugString: new JiraService().convertMsToTime(tempoRetrabalhoTarefasBug),
+      tempoRetrabalhoTarefasMelhoriaString: new JiraService().convertMsToTime(tempoRetrabalhoTarefasMelhoria),
+      tempoPorStatus: tempoPorStatus,
+      tempoPorStatusString: tempoPorStatusString,
+      tempoRetrabalhoPorStatus: tempoRetrabalhoPorStatus,
+      tempoRetrabalhoPorStatusString: tempoRetrabalhoPorStatusString,
+      tasks: tasks,};
+  }
+
+  async sprintActualTasks(sprints:String) {
+    var tasksList: String[] = await new JiraService().getSprintsTasks(sprints);
+
+    var qtdTarefas = 0;
+    var qtdPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0, DONE:0}
+
+    for(const task of tasksList) {
+
+      qtdTarefas += 1;
+
+      var data: TaskDetailsDTO = await new JiraService().getTask(task)
+
+      if(data.statusAtual === 'TAREFAS PENDENTES')
+        qtdPorStatus.TODO = qtdPorStatus.TODO+1
+      if(data.statusAtual === 'EM ANDAMENTO')
+        qtdPorStatus.ANDAMENTO = qtdPorStatus.ANDAMENTO+1
+      if(data.statusAtual === 'CODE REVIEW')
+        qtdPorStatus.REVIEW = qtdPorStatus.REVIEW+1
+      if(data.statusAtual === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO')
+        qtdPorStatus.DEPLOY_HOMOL = qtdPorStatus.DEPLOY_HOMOL+1
+      if(data.statusAtual === 'AGUARDANDO TESTE')
+        qtdPorStatus.AGUARDANDO_TESTE = qtdPorStatus.AGUARDANDO_TESTE+1
+      if(data.statusAtual === 'EM TESTE')
+        qtdPorStatus.TESTE = qtdPorStatus.TESTE+1
+      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO')
+        qtdPorStatus.DEPLOY_PROD = qtdPorStatus.DEPLOY_PROD+1
+      if(data.statusAtual === 'CONCLUÍDO')
+        qtdPorStatus.DONE = qtdPorStatus.DONE+1
+    }
+
+    return {
+      qtdPorStatus: qtdPorStatus,
+      qtdTarefas: qtdTarefas};
   }
 }

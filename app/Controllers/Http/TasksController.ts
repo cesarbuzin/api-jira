@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ErroDTO from 'App/Models/ErroDTO'
 import ProjectDataDTO from 'App/Models/ProjectDataDTO'
+import SprintDataDTO from 'App/Models/SprintDataDTO'
 import TaskDataDTO from 'App/Models/TaskDataDTO'
 import JiraService from 'App/Services/JiraService'
 
@@ -45,6 +46,29 @@ export default class TasksController {
       const dataFinal = request.input('dataFinal')
 
       return this.jiraService.projectDataTasks(project, null, dataInicial, dataFinal)
+    } catch (error) {
+      return{mensagemErro: error.mensagem}
+    }
+  }
+
+  public async sprintDataTasks({ request }: HttpContextContract): Promise<ProjectDataDTO| ErroDTO> {
+
+    try {
+      const project = request.input('project')
+      const sprint = request.input('sprint')
+
+      return this.jiraService.sprintDataTasks(project, null, sprint)
+    } catch (error) {
+      return{mensagemErro: error.mensagem}
+    }
+  }
+
+  public async sprintActualTasks({ request }: HttpContextContract): Promise<SprintDataDTO| ErroDTO> {
+
+    try {
+      const sprints = request.input('sprints')
+
+      return this.jiraService.sprintActualTasks(sprints)
     } catch (error) {
       return{mensagemErro: error.mensagem}
     }

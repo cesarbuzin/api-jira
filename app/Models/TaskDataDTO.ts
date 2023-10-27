@@ -15,4 +15,5 @@ export default class TaskDataDTO {
   dataFim: Date | null
   tempoRetrabalhoString: String
   tempoTotalString: String
+  statusAtual: String
 }
