@@ -1,0 +1,133 @@
+<div class="row">
+  <div class="col-sm-3">
+    <app-card cardTitle="checked">
+      <p>
+        <ui-switch checked class="px-2"></ui-switch>
+        <ui-switch [checked]="false"></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Disabled">
+      <p>
+        <ui-switch disabled class="px-2"></ui-switch>
+        <ui-switch checked [disabled]="true"></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="reverse">
+      <p>
+        <ui-switch reverse></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="color">
+      <ui-switch class="px-2"></ui-switch>
+      <ui-switch color="blue" class="px-2"></ui-switch>
+      <ui-switch color="red"></ui-switch>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Two Way Binding">
+      <ui-switch [(ngModel)]="enable"></ui-switch>
+      <p class="mt-2">Current Value: {{ enable }}</p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Value Change">
+      <ui-switch (valueChange)="onValueChange($event)"></ui-switch>
+      <p class="mt-2">Value {{ valueChange }}</p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Change Event">
+      <ui-switch (changeEvent)="onChangeEvent($event)"></ui-switch>
+      <p class="mt-2">Event {{ changeEvent }}</p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Change">
+      <ui-switch (change)="onChange($event)"></ui-switch>
+      <div class="d-flex mt-2">
+        <p class="px-2">Change Count {{ count }}</p>
+        <p>Value {{ change }}</p>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Switch Color">
+      <p>
+        <ui-switch switchColor="red"></ui-switch>
+        <ui-switch switchColor="blue"></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-3">
+    <app-card cardTitle="Text Color">
+      <p>
+        <ui-switch uncheckedTextColor="red" checkedTextColor="blue" checkedLabel="ON" uncheckedLabel="OFF"> </ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-6">
+    <app-card cardTitle="Custom Labels">
+      <p>
+        <ui-switch class="px-2" checkedLabel="Super Long Label" uncheckedLabel="Super Long Label" size="small"> </ui-switch>
+        <ui-switch class="px-2" checkedLabel="Super Long Label" uncheckedLabel="Super Long Label"> </ui-switch>
+        <ui-switch checkedLabel="Super Long Label" uncheckedLabel="Super Long Label" size="large"></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-4">
+    <app-card cardTitle="Size">
+      <p>
+        <ui-switch size="small" class="px-2"></ui-switch>
+        <ui-switch class="px-2"></ui-switch>
+        <ui-switch size="large"></ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-4">
+    <app-card cardTitle="  Custom Switch Content">
+      <p class="custom-icons">
+        <ui-switch uncheckedLabel="off" class="px-2" checkedLabel="on" size="small">
+          <i class="fa fa-check"></i>
+        </ui-switch>
+
+        <ui-switch uncheckedLabel="off" class="px-2" checkedLabel="on">
+          <i class="fa fa-check"></i>
+        </ui-switch>
+
+        <ui-switch uncheckedLabel="off" checkedLabel="on" size="large">
+          <i class="fa fa-check fa-2x"></i>
+        </ui-switch>
+      </p>
+    </app-card>
+  </div>
+
+  <div class="col-sm-4">
+    <app-card cardTitle="Before Change handling + Loading Icon">
+      <p>
+        <ui-switch [loading]="isLoading" [beforeChange]="fakeAsync" [(ngModel)]="enable">
+          <i class="fa fa-check" *ngIf="enable && !isLoading"></i>
+          <i class="fa fa-times" *ngIf="!enable && !isLoading"></i>
+          <i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i>
+        </ui-switch>
+      </p>
+    </app-card>
+  </div>
+</div>

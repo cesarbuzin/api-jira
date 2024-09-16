@@ -1,0 +1,68 @@
+<div class="row">
+  <!-- [ sample-page ] start -->
+  <div class="col-sm-12">
+    <div class="card table-card">
+      <div class="card-header">
+        <div class="row align-items-center g-2">
+          <div class="col">
+            <h5>List</h5>
+          </div>
+          <div class="col-auto">
+            <div class="form-search">
+              <i class="ti ti-search"></i>
+              <input type="search" class="form-control" placeholder="Search Followers" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User Profile</th>
+                <th>Country</th>
+                <th>Friends</th>
+                <th>Followers</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of PersonList">
+                <td>{{ task.number }}</td>
+                <td>
+                  <div class="media align-items-center fix-content">
+                    <img class="img-radius img-fluid wid-40" src="{{ task.src }}" alt="User image" />
+                    <div class="media-body ms-3">
+                      <h5 class="mb-0">
+                        {{ task.name }}
+                      </h5>
+                      <p class="text-muted f-12 mb-0">{{ task.email }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ task.country }}</td>
+                <td>{{ task.friend }}</td>
+                <td>{{ task.follower }}</td>
+                <td>
+                  <span class="badge {{ task.color }} rounded-pill f-14">{{ task.status }}</span>
+                </td>
+                <td class="text-center">
+                  <button type="button" class="btn btn-link-primary" title="Send Message">
+                    <i class="ti ti-message"></i>
+                  </button>
+                  <button type="button" class="btn btn-link-danger" title="Delete">
+                    <i class="ti ti-ban"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- [ sample-page ] end -->
+</div>

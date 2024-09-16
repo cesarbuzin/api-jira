@@ -1,0 +1,11 @@
+.custom-switches {
+  .switch {
+    background: #fb6542;
+    small {
+      background: #375e97;
+    }
+    &.checked {
+      background: #3f681c;
+    }
+  }
+}

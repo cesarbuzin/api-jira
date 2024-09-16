@@ -1,0 +1,197 @@
+<div *ngIf="this.isConfig" id="styleSelector" class="menu-styler" [ngClass]="{ open: styleSelectorToggle }">
+  <div class="pct-c-btn">
+    <a href="javascript:" (click)="styleSelectorToggle = !styleSelectorToggle"></a>
+  </div>
+  <div class="style-block">
+    <ng-scrollbar style="height: calc(100vh - 70px)" visibility="hover">
+      <div class="card border">
+        <div class="card-header">
+          <h5>Layout</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1">Mode</p>
+          <div *ngIf="berryConfig['pre-layout'] !== 'layout-8'" class="layout-type">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="inlineRadioOptions"
+                id="inlineRadio1"
+                checked
+                [ngClass]="{ active: layoutType === 'menu-dark' }"
+                (click)="setLayout('menu-dark')"
+                data-value="menu-dark"
+                ngbTooltip="Default Layout"
+              />
+              <label class="form-check-label" for="inlineRadio1"> Light </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="inlineRadioOptions"
+                id="inlineRadio2"
+                [ngClass]="{ active: layoutType === 'dark' }"
+                (click)="setLayout('dark')"
+                data-value="dark"
+                ngbTooltip="Dark"
+              />
+              <label class="form-check-label" for="inlineRadio2"> Dark </label>
+            </div>
+          </div>
+          <div class="pc-rtl" *ngIf="berryConfig['layout'] !== 'horizontal'">
+            <p class="mt-3 mb-1">Direction</p>
+            <div *ngIf="berryConfig['pre-layout'] !== 'layout-8' && berryConfig['pre-layout'] !== 'layout-6'" class="form-group mb-0">
+              <div class="switch switch-primary d-inline m-r-10">
+                <input type="checkbox" placeholder="theme rtl" id="theme-rtl" [(ngModel)]="rtlLayout" (change)="setRtlLayout($event)" />
+                <label for="theme-rtl" class="cr"></label>
+              </div>
+              <label>RTL</label>
+            </div>
+          </div>
+          <div class="box-container">
+            <p class="mt-3 mb-1">Box Container</p>
+            <div class="form-group mb-0">
+              <div class="switch switch-primary d-inline m-r-10">
+                <input
+                  type="checkbox"
+                  placeholder="theme box Container"
+                  id="box-container"
+                  [(ngModel)]="boxContainer"
+                  (change)="setBoxContainer($event)"
+                />
+                <label for="box-container" class="cr"></label>
+              </div>
+              <label>Box Container</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card border">
+        <div class="card-header">
+          <h5>Preset Color</h5>
+        </div>
+        <div class="card-body">
+          <div class="body-color preset-color">
+            <a
+              href="javascript:"
+              title="preset-1"
+              [ngClass]="{ active: bodyColor === 'preset-1' }"
+              (click)="SetBodyColor('preset-1')"
+              data-value="preset-1"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-2"
+              [ngClass]="{ active: bodyColor === 'preset-2' }"
+              (click)="SetBodyColor('preset-2')"
+              data-value="preset-2"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-2"
+              [ngClass]="{ active: bodyColor === 'preset-3' }"
+              (click)="SetBodyColor('preset-3')"
+              data-value="preset-3"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-4"
+              [ngClass]="{ active: bodyColor === 'preset-4' }"
+              (click)="SetBodyColor('preset-4')"
+              data-value="preset-4"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-5"
+              [ngClass]="{ active: bodyColor === 'preset-5' }"
+              (click)="SetBodyColor('preset-5')"
+              data-value="preset-5"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-6"
+              [ngClass]="{ active: bodyColor === 'preset-6' }"
+              (click)="SetBodyColor('preset-6')"
+              data-value="preset-6"
+              ><span></span><span></span
+            ></a>
+            <a
+              href="javascript:"
+              title="preset-7"
+              [ngClass]="{ active: bodyColor === 'preset-7' }"
+              (click)="SetBodyColor('preset-7')"
+              data-value="preset-7"
+              ><span></span><span></span
+            ></a>
+          </div>
+        </div>
+      </div>
+      <div class="card border">
+        <div class="card-header">
+          <h5>Font Family</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault1"
+              checked
+              [ngClass]="{
+                active: setFontFamily === 'Roboto'
+              }"
+              (click)="fontFamily('Roboto')"
+              data-value="Roboto"
+            />
+            <label class="form-check-label" for="flexRadioDefault1"> Roboto </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault2"
+              [ngClass]="{
+                active: setFontFamily === 'Poppins'
+              }"
+              (click)="fontFamily('Poppins')"
+              data-value="Poppins"
+            />
+            <label class="form-check-label" for="flexRadioDefault2"> Poppins </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault3"
+              [ngClass]="{
+                active: setFontFamily === 'Inter'
+              }"
+              (click)="fontFamily('Inter')"
+              data-value="Inter"
+            />
+            <label class="form-check-label" for="flexRadioDefault3"> Inter </label>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="berryConfig['pre-layout'] !== 'layout-8'" class="layout-type d-grid">
+        <button
+          class="btn btn-light-danger"
+          [ngClass]="{ active: layoutType === 'reset' }"
+          (click)="setLayout('reset')"
+          data-value="reset"
+          ngbTooltip="Reset"
+          >Reset to Default</button
+        >
+      </div>
+    </ng-scrollbar>
+  </div>
+</div>

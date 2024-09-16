@@ -1,0 +1,62 @@
+<!-- Vertical layout -->
+<ng-scrollbar
+  *ngIf="this.berryConfig['layout'] === 'vertical'"
+  style="height: calc(100vh - 88px)"
+  [exclude]="'#mobile-collapse1'"
+  visibility="hover"
+>
+  <div class="navbar-content">
+    <ul class="nav coded-inner-navbar" (clickOutside)="fireOutClick()" (mouseleave)="navMob()">
+      <ng-container *ngFor="let item of navigations">
+        <app-nav-group *ngIf="item.type === 'group'" [item]="item"></app-nav-group>
+        <app-nav-collapse *ngIf="item.type === 'collapse'" [item]="item"></app-nav-collapse>
+        <app-nav-item *ngIf="item.type === 'item'" [item]="item"></app-nav-item>
+      </ng-container>
+    </ul>
+  </div>
+</ng-scrollbar>
+
+<!-- Horizontal layout -->
+<div *ngIf="this.berryConfig['layout'] === 'horizontal'" class="navbar-content sidenav-horizontal" id="layout-sidenav">
+  <a href="javascript:" class="sidenav-horizontal-prev" [ngClass]="prevDisabled" (click)="scrollMinus()"></a>
+  <div #navbarWrapper class="sidenav-horizontal-wrapper">
+    <ul
+      #navbarContent
+      id="side-nav-horizontal"
+      class="nav coded-inner-navbar sidenav-inner"
+      (clickOutside)="fireLeave()"
+      (mouseleave)="fireLeave()"
+    >
+      <ng-container *ngFor="let item of navigations">
+        <app-nav-group *ngIf="item.type === 'group'" [item]="item"></app-nav-group>
+        <app-nav-collapse *ngIf="item.type === 'collapse'" [item]="item"></app-nav-collapse>
+        <app-nav-item *ngIf="item.type === 'item'" [item]="item"></app-nav-item>
+      </ng-container>
+    </ul>
+  </div>
+  <a href="javascript:" class="sidenav-horizontal-next" [ngClass]="nextDisabled" (click)="scrollPlus()"></a>
+</div>
+
+<!-- Compact Layout -->
+<div class="navbar-content">
+  <ng-scrollbar *ngIf="this.berryConfig['layout'] === 'compact'" style="height: calc(100vh - 80px)" visibility="hover">
+    <ul class="nav coded-inner-navbar" (clickOutside)="fireOutClick()" (mouseleave)="navMob()">
+      <ng-container *ngFor="let item of navigations">
+        <app-nav-group *ngIf="item.type === 'group'" [item]="item" (showCollapseItem)="subMenuCollapse($event)"></app-nav-group>
+        <app-nav-collapse *ngIf="item.type === 'collapse'"></app-nav-collapse>
+        <app-nav-item *ngIf="item.type === 'item'" [item]="item"></app-nav-item>
+      </ng-container>
+    </ul>
+  </ng-scrollbar>
+</div>
+<div class="pc-compact-submenu" *ngIf="this.berryConfig['layout'] === 'compact'">
+  <div class="collapse-item">
+    <ng-scrollbar style="height: calc(100vh - 70px)" visibility="hover">
+      <ng-container *ngFor="let item of collapseItem">
+        <app-nav-group *ngIf="item.type === 'group'" [item]="item"></app-nav-group>
+        <app-nav-collapse *ngIf="item.type === 'collapse'" [item]="item"></app-nav-collapse>
+        <app-nav-item *ngIf="item.type === 'item'" [item]="item"></app-nav-item>
+      </ng-container>
+    </ng-scrollbar>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Image Cropper Plugin">
+      <div class="input-group">
+        <input type="file" placeholder="Upload Your Images" (change)="fileChangeEvent($event)" class="form-control" />
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col-sm-6">
+          <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" />
+        </div>
+        <div class="col-sm-6">
+          <button (click)="rotateLeft()" class="p-10 m-2 btn btn-sm btn-secondary"> Rotate left </button>
+          <button (click)="rotateRight()" class="p-10 m-2 btn btn-sm btn-secondary"> Rotate right </button>
+          <button (click)="flipHorizontal()" class="p-10 m-2 btn btn-sm btn-secondary"> Flip horizontal </button>
+          <button (click)="flipVertical()" class="p-10 m-2 btn btn-sm btn-secondary"> Flip vertical </button>
+          <br />
+          <br />
+          <button (click)="toggleContainWithinAspectRatio()" class="p-10 m-2 btn btn-sm btn-secondary">
+            {{ containWithinAspectRatio ? 'Fill Aspect Ratio' : 'Contain Within Aspect Ratio' }}
+          </button>
+          <button (click)="resetImage()" class="p-10 m-2 btn btn-sm btn-secondary"> Reset image </button>
+          <br />
+          <br />
+          <input [(ngModel)]="rotation" class="m-2" style="padding: 2px" placeholder="Rotation" type="number" (keyup)="updateRotation()" />
+          <button (click)="zoomOut()" class="p-10 m-2 btn btn-sm btn-secondary"> Zoom - </button>
+          <button (click)="zoomIn()" class="p-10 m-2 btn btn-sm btn-secondary"> Zoom + </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [containWithinAspectRatio]="containWithinAspectRatio"
+            [aspectRatio]="4 / 3"
+            [resizeToWidth]="256"
+            [cropperMinWidth]="128"
+            [onlyScaleDown]="true"
+            [roundCropper]="false"
+            [canvasRotation]="canvasRotation"
+            [transform]="transform"
+            [alignImage]="'left'"
+            [style.display]="showCropper ? null : 'none'"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()"
+          ></image-cropper>
+        </div>
+        <div class="col-sm-6">
+          <button class="p-10 m-2 btn btn-sm btn-secondary"> Submit </button>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>

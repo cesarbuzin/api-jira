@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="card table-card">
+      <div class="card-header">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5>Product List</h5>
+          <button class="btn btn-primary" (click)="productData(content)">
+            <i class="ti ti-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table datatable [dtOptions]="dtExportButtonOptions" class="table table-striped row-border table-hover"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-offcanvas>
+  <ng-scrollbar style="height: calc(100vh - 0px)" visibility="hover">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Add Product</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.close('Close click')"></button>
+    </div>
+    <app-product-content></app-product-content>
+  </ng-scrollbar>
+</ng-template>

@@ -1,0 +1,55 @@
+<div class="chat-user_list">
+  <div class="card">
+    <div class="card-body">
+      <div class="media align-items-center mb-3">
+        <div class="chat-avtar">
+          <img class="rounded-circle img-fluid wid-40" src="assets/images/user/avatar-5.jpg" alt="User image" />
+          <i class="chat-badge bg-warning"></i>
+        </div>
+        <div class="media-body mx-3">
+          <h4 class="mb-0">John Doe</h4>
+        </div>
+        <div class="dropdown" ngbDropDown>
+          <a class="avtar avtar-xs btn-link-primary dropdown-toggle arrow-none" type="button" ngbDropDownToggle>
+            <i class="ti ti-chevron-down f-16"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" ngbDropDownMenu>
+            <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-success"></i> Available</a>
+            <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-warning"></i> Edit Do not disturb</a>
+            <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-danger"></i> Offline</a>
+          </div>
+        </div>
+      </div>
+      <div class="form-search">
+        <i class="ti ti-search"></i>
+        <input type="search" class="form-control" placeholder="Search Followers" />
+      </div>
+    </div>
+    <div class="card-body pt-0">
+      <ul class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action p-3" *ngFor="let list of person">
+          <div class="media align-items-center">
+            <div class="chat-avtar">
+              <img class="rounded-circle img-fluid wid-40" src="{{ list.src }}" alt="User image" />
+              <i class="chat-badge {{ list.status }}"></i>
+            </div>
+            <div class="media-body mx-2">
+              <h5 class="mb-0">
+                {{ list.name }}
+                <span class="float-end text-sm text-muted f-w-400">{{ list.time }}</span>
+              </h5>
+              <span class="text-sm text-muted"
+                >{{ list.department }}
+                <span class="float-end">
+                  <div class="badge bg-secondary rounded-pill unread_message">
+                    {{ list.message }}
+                  </div>
+                </span></span
+              >
+            </div>
+          </div>
+        </a>
+      </ul>
+    </div>
+  </div>
+</div>

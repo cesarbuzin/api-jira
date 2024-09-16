@@ -1,0 +1,138 @@
+@import 'bar-rating';
+@import 'data-tables';
+@import 'daterange';
+@import 'lightbox';
+@import 'maxlength';
+@import 'sweatalert';
+@import 'notification';
+@import 'pnotify';
+@import 'modal';
+@import 'rangeslider';
+@import 'tags-input';
+@import 'wizard';
+@import 'select2';
+@import 'slider';
+@import 'switches';
+@import 'peitychart';
+@import 'tree-view';
+@import 'ngx-chips';
+@import 'angular-datatables';
+
+.switch {
+  border: none !important;
+}
+
+.utility-card label {
+  margin-right: 3px;
+  border-radius: 6px;
+}
+
+.auth-main .carousel .carousel-indicators {
+  bottom: -30px;
+}
+
+app-profile-one app-card .card,
+app-profile-three app-card .card {
+  border: 1px solid #eeeeee !important;
+}
+
+.mat-vertical-stepper-header .mat-step-icon {
+  display: none;
+}
+
+.mat-vertical-stepper-header {
+  margin-bottom: 10px;
+}
+
+.mat-step-text-label .flex-shrink-0:hover {
+  color: '$pc-primary';
+}
+
+app-chat {
+  .nav {
+    display: block;
+  }
+  .nav-tabs .nav-item:not(:last-child) .nav-link {
+    border-bottom: 1px solid $border-color;
+  }
+  .list-group-item.active {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+  }
+}
+
+.m-24 {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+app-email .nav {
+  display: block !important;
+}
+
+app-form-basic .one-dropdown {
+  padding: 0.65rem 1rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: $primary !important;
+}
+.dataTables_filter label input {
+  margin-left: 10px !important;
+}
+
+table.dataTable {
+  width: 100% !important;
+}
+
+app-kanban .ng-scroll-content {
+  display: block !important;
+}
+
+app-configuration {
+  .nav-tabs .cut-tab.active {
+    color: $primary;
+  }
+  .form-group label {
+    margin-bottom: 0.2rem !important;
+  }
+}
+
+.tag-chips .ng2-tag-input__text-input {
+  padding: 0.3rem 0.5rem 0rem 0.5rem !important;
+}
+
+.switch.switch-medium {
+  margin: 0 0 10px 0 !important;
+}
+
+.dropdown-menu {
+  z-index: 1030 !important;
+}
+
+dp-date-picker {
+  display: block !important;
+
+  &.dp-material .dp-picker-input {
+    width: 100% !important;
+  }
+}
+
+.berry-rtl {
+  aw-wizard-navigation-bar.horizontal.large-empty-symbols ul.steps-indicator li:not(:last-child):after,
+  aw-wizard-navigation-bar.horizontal.large-filled-symbols ul.steps-indicator li:not(:last-child):after {
+    left: calc(50% - 115px);
+  }
+
+  aw-wizard-navigation-bar.horizontal.small ul.steps-indicator li:not(:last-child):after {
+    left: calc(50% - 98px);
+  }
+
+  aw-wizard-navigation-bar.vertical.small ul.steps-indicator {
+    padding: 5px 19px 5px 75px;
+  }
+
+  aw-wizard-navigation-bar.vertical ul.steps-indicator li a {
+    display: block;
+  }
+}

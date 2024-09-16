@@ -1,0 +1,251 @@
+<div class="row">
+  <!-- [ sample-page ] start -->
+  <div class="col-sm-12">
+    <div class="chat-wrapper">
+      <div class="offcanvas-md offcanvas-start chat-offcanvas">
+        <div class="offcanvas-body p-0">
+          <div id="chat-user_list" class="show collapse collapse-horizontal" id="collapseExample" [ngbCollapse]="isCollapsed">
+            <div class="chat-user_list">
+              <div class="card">
+                <div class="card-body">
+                  <div class="media align-items-center mb-3">
+                    <div class="chat-avtar">
+                      <img class="rounded-circle img-fluid wid-40" src="assets/images/user/avatar-5.jpg" alt="User image" />
+                      <i class="chat-badge bg-warning"></i>
+                    </div>
+                    <div class="media-body mx-3">
+                      <h4 class="mb-0">John Doe</h4>
+                    </div>
+                    <div class="dropdown" ngbDropdown>
+                      <a class="avtar avtar-xs btn-link-primary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                        <i class="ti ti-chevron-down f-16"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                        <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-success"></i> Available</a>
+                        <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-warning"></i> Edit Do not disturb</a>
+                        <a class="dropdown-item" href="javascript:"><i class="chat-badge bg-danger"></i> Offline</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-search">
+                    <i class="ti ti-search"></i>
+                    <input type="search" class="form-control" placeholder="Search Followers" />
+                  </div>
+                </div>
+                <ng-scrollbar style="height: calc(100vh - 415px)" visibility="hover">
+                  <div class="card-body pt-0">
+                    <ul ngbNav #nav="ngbNav" aria-busy="true" class="nav-tabs">
+                      <li [ngbNavItem] *ngFor="let list of person">
+                        <a ngbNavLink class="list-group-item list-group-item-action p-3">
+                          <div class="media align-items-center">
+                            <div class="chat-avtar">
+                              <img class="rounded-circle img-fluid wid-40" src="{{ list.src }}" alt="User image" />
+                              <i class="chat-badge {{ list.status }}"></i>
+                            </div>
+                            <div class="media-body mx-2">
+                              <h5 class="mb-0">
+                                {{ list.name }}
+                                <span class="float-end text-sm text-muted f-w-400">{{ list.time }}</span>
+                              </h5>
+                              <span class="text-sm text-muted"
+                                >{{ list.department }}
+                                <span class="float-end">
+                                  <div class="badge bg-secondary rounded-pill unread_message">
+                                    {{ list.message }}
+                                  </div>
+                                </span></span
+                              >
+                            </div>
+                          </div>
+                        </a>
+                        <ng-template ngbNavContent>
+                          <div class="card">
+                            <div class="card-header">
+                              <div class="d-sm-flex align-items-center">
+                                <ul class="list-inline me-auto mb-0">
+                                  <li class="list-inline-item align-bottom">
+                                    <a
+                                      href="javascript:"
+                                      class="d-md-none avtar avtar-s btn-link-secondary"
+                                      title="collapse menu"
+                                      (click)="open(content)"
+                                    >
+                                      <i class="ti ti-menu-2 f-18"></i>
+                                    </a>
+                                    <a
+                                      href="javascript:"
+                                      class="d-none d-md-inline-flex avtar avtar-s btn-link-secondary"
+                                      (click)="isCollapsed = !isCollapsed"
+                                      [attr.aria-expanded]="!isCollapsed"
+                                      aria-controls="collapseExample2"
+                                      title="collapse menu"
+                                    >
+                                      <i class="ti ti-menu-2 f-18"></i>
+                                    </a>
+                                  </li>
+                                  <li class="list-inline-item">
+                                    <div class="media align-items-center">
+                                      <div class="chat-avtar">
+                                        <img
+                                          class="rounded-circle img-fluid wid-40"
+                                          src="assets/images/user/avatar-5.jpg"
+                                          alt="User image"
+                                        />
+                                        <i class="chat-badge bg-warning"></i>
+                                      </div>
+                                      <div class="media-body mx-3">
+                                        <h4 class="mb-0">John Doe</h4>
+                                        <span class="text-sm text-muted">Last seen 2h ago</span>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                                <ul class="list-inline ms-auto mb-0">
+                                  <li class="list-inline-item">
+                                    <a href="javascript:" class="avtar avtar-s btn-link-primary" title="call">
+                                      <i class="ti ti-phone-call f-18"></i>
+                                    </a>
+                                  </li>
+                                  <li class="list-inline-item">
+                                    <a href="javascript:" class="avtar avtar-s btn-link-secondary" title="video">
+                                      <i class="ti ti-video f-18"></i>
+                                    </a>
+                                  </li>
+                                  <li class="list-inline-item">
+                                    <a
+                                      href="javascript:"
+                                      class="d-md-none avtar avtar-s btn-link-primary"
+                                      title="user info"
+                                      (click)="openInfo(content1)"
+                                    >
+                                      <i class="ti ti-info-circle f-18"></i>
+                                    </a>
+                                    <a
+                                      href="javascript:"
+                                      title="user info"
+                                      class="d-none d-md-inline-flex avtar avtar-s btn-link-primary"
+                                      (click)="listIsCollapsed = !listIsCollapsed"
+                                      [attr.aria-expanded]="!listIsCollapsed"
+                                      aria-controls="collapseExample3"
+                                    >
+                                      <i class="ti ti-info-circle f-18"></i>
+                                    </a>
+                                  </li>
+                                  <li class="list-inline-item">
+                                    <div class="dropdown" ngbDropdown>
+                                      <a
+                                        class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none"
+                                        type="button"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        ngbDropdownToggle
+                                      >
+                                        <i class="ti ti-dots f-18"></i>
+                                      </a>
+                                      <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                                        <a class="dropdown-item" href="javascript:">Name</a>
+                                        <a class="dropdown-item" href="javascript:">Date</a>
+                                        <a class="dropdown-item" href="javascript:">Ratting</a>
+                                        <a class="dropdown-item" href="javascript:">Unread</a>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <app-chat-box></app-chat-box>
+                          </div>
+                        </ng-template>
+                      </li>
+                    </ul>
+                  </div>
+                </ng-scrollbar>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-content">
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+      <div class="offcanvas-md offcanvas-end chat-offcanvas">
+        <div class="offcanvas-header">
+          <button type="button" class="btn-close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+          <div id="chat-user_info" class="collapse collapse-horizontal" id="collapseExample4" [ngbCollapse]="listIsCollapsed">
+            <div class="chat-user_info">
+              <div class="text-center">
+                <div class="chat-avtar d-inline-flex mx-auto">
+                  <img class="rounded-circle img-fluid wid-100" src="assets/images/user/Profile.png" alt="User image" />
+                  <i class="chat-badge bg-success"></i>
+                </div>
+                <h4 class="mb-0">John Doe</h4>
+                <p class="text-muted text-sm mb-4"> Dynamic Operations Officer </p>
+              </div>
+              <div class="card">
+                <ng-scrollbar style="height: calc(100vh - 430px)" visibility="hover">
+                  <ng-container *ngTemplateOutlet="chatUserInfo"></ng-container>
+                </ng-scrollbar>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- [ sample-page ] end -->
+</div>
+
+<ng-template #content1 let-offcanvas>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel"> User Info </h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="offcanvas.close('Close click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="chat-user_info">
+      <div class="text-center">
+        <div class="chat-avtar d-inline-flex mx-auto">
+          <img class="rounded-circle img-fluid wid-100" src="assets/images/user/avatar-5.jpg" alt="User image" />
+          <i class="chat-badge bg-success"></i>
+        </div>
+        <h4 class="mb-0">John Doe</h4>
+        <p class="text-muted text-sm mb-4"> Dynamic Operations Officer </p>
+      </div>
+      <div class="card">
+        <ng-container *ngTemplateOutlet="chatUserInfo"></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #chatUserInfo>
+  <div class="card-body">
+    <h5 class="mb-3">Information</h5>
+    <div class="media align-items-start" *ngFor="let info of information">
+      <i class="material-icons-two-tone f-20 opacity-75">{{ info.icon }}</i>
+      <div class="media-body ms-2">
+        <p class="mb-2">{{ info.text }}</p>
+      </div>
+    </div>
+    <hr class="my-3" />
+    <h5 class="mb-3">Attachment</h5>
+    <div class="media align-items-center mb-2" *ngFor="let friend of friends">
+      <img src="{{ friend.src }}" alt="images" class="img-fluid" />
+      <div class="media-body ms-2">
+        <h6 class="mb-0">File Name.jpg</h6>
+        <span class="text-muted text-sm">4/16/2021 07:47:03</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel"> User List </h5>
+    <button type="button" class="btn-close text-reset" (click)="offcanvas.close('Close click')"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <app-chat-user-list></app-chat-user-list>
+  </div>
+</ng-template>

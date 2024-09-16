@@ -1,0 +1,486 @@
+<div class="row">
+  <!-- [ sample-page ] start -->
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header pb-0">
+        <ul ngbNav aria-busy="true" #nav="ngbNav" class="nav-tabs nav profile-tabs">
+          <li class="nav-item" [ngbNavItem]="1">
+            <a href="javascript:" ngbNavLink class="nav-link"> <i class="material-icons-two-tone me-2">account_circle</i>Profile </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card border">
+                    <div class="card-header">
+                      <div class="media align-items-center">
+                        <img class="img-radius img-fluid wid-40" src="assets/images/user/avatar-1.jpg" alt="User image" />
+                        <div class="media-body mx-3">
+                          <h4 class="mb-1">John Doe</h4>
+                          <h6 class="text-muted mb-0">UI/UX Designer</h6>
+                        </div>
+                        <div class="badge bg-primary rounded-pill text-base"> Pro </div>
+                      </div>
+                    </div>
+                    <div class="card-body px-2 pb-0">
+                      <div class="list-group list-group-flush">
+                        <a href="javascript:" class="list-group-item list-group-item-action" *ngFor="let list of infoList">
+                          <div class="media align-items-center">
+                            <i class="material-icons-two-tone f-20">{{ list.icon }}</i>
+                            <div class="media-body mx-3">
+                              <h5 class="m-0">{{ list.user }}</h5>
+                            </div>
+                            <small class="text-truncate">{{ list.text }}</small>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row text-center">
+                        <div class="col-4" *ngFor="let task of social">
+                          <h3 class="mb-0">{{ task.total }}</h3>
+                          <small class="text-muted">{{ task.user }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <app-card cardTitle="About Me">
+                    <p class="mb-4">
+                      Hello,I’m Anshan Handgun Creative Graphic Designer & User Experience Designer based in Website, I create digital
+                      Products a more Beautiful and usable place. Morbid accusant ipsum. Nam nec tellus at.
+                    </p>
+                    <h5>Personal Details</h5>
+                    <hr class="my-3" />
+                    <div class="table-responsive">
+                      <table class="table table-borderless">
+                        <tbody>
+                          <tr *ngFor="let task of taskList">
+                            <td
+                              ><b class="text-header">{{ task.title }}</b></td
+                            >
+                            <td>:</td>
+                            <td>{{ task.name }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </app-card>
+                  <app-card cardTitle="Education">
+                    <div class="row align-items-center mb-3" *ngFor="let task of education">
+                      <div class="col-sm-3">
+                        <h5>{{ task.year }}</h5>
+                        <span>{{ task.course }}</span>
+                      </div>
+                      <div class="col-sm-9">
+                        <h6>{{ task.title }}</h6>
+                        <p>{{ task.text }}</p>
+                      </div>
+                    </div>
+                  </app-card>
+                  <app-card cardTitle="Employment">
+                    <div class="row align-items-center mb-3">
+                      <div class="col-sm-3">
+                        <h5>Current</h5>
+                        <span>Senior</span>
+                      </div>
+                      <div class="col-sm-9">
+                        <h6>Senior UI/UX designer</h6>
+                        <p class="mb-1">
+                          Perform task related to project manager with the 100+ team under my observation. Team management is key role in
+                          this company.
+                        </p>
+                        <span class="text-muted">Microsoft, TX, USA</span>
+                      </div>
+                    </div>
+                    <div class="row align-items-center mb-3">
+                      <div class="col-sm-3">
+                        <h5>2017-2019</h5>
+                        <span>Junior</span>
+                      </div>
+                      <div class="col-sm-9">
+                        <h6>Trainee cum Project Manager</h6>
+                        <span class="text-muted">Microsoft, TX, USA</span>
+                      </div>
+                    </div>
+                  </app-card>
+                  <app-card cardTitle="skills">
+                    <div class="row align-items-center mt-3">
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">Web Designer</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-primary" style="width: 70%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">70%</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">Graphic Designer</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-primary" style="width: 85%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">80%</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">UX Researcher</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-secondary" style="width: 85%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">3.2</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">HTML</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-primary" style="width: 45%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">45%</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">Wordpress</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-secondary" style="width: 25%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">25%</h6>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <h6 class="m-b-10 text-muted">PHP</h6>
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <div class="progress" style="height: 4px">
+                              <div class="progress-bar bg-primary" style="width: 65%"></div>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <h6 class="m-b-0">65%</h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </app-card>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="2">
+            <a href="javascript:" ngbNavLink class="nav-link"> <i class="material-icons-two-tone me-2">description</i>Personal Details </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-md-6">
+                  <app-card cardTitle="Personal Information">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="form-label" for="First Name">Name <span class="text-danger">*</span></label>
+                          <input type="text" id="First Name" class="form-control" value="Ashoka Tano" required />
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="form-label">Location</label>
+                          <select class="form-control" title="select">
+                            <option>Washington</option>
+                            <option>India</option>
+                            <option>Africa</option>
+                            <option>New York</option>
+                            <option>Malaysia</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="form-label">Bio <span class="text-danger">*</span></label>
+                          <textarea class="form-control" placeholder="Enter Your Message">
+  I consider myself as a creative, professional and a flexible person. I can adapt with any kind of brief and design style</textarea
+                          >
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="form-label">Experience<span class="text-danger">*</span></label>
+                          <select class="form-control" title="select">
+                            <option>Startup</option>
+                            <option>2 year</option>
+                            <option>3 year</option>
+                            <option selected>4 year</option>
+                            <option>5 year</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </app-card>
+                </div>
+                <div class="col-md-6">
+                  <app-card cardTitle="Contact Information">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="form-label" for="Contact Number">Contact Phone</label>
+                          <input type="text" id="Contact Number" class="form-control" value="(+99) 9999 999 999" />
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group">
+                          <label class="form-label" for="Email">Email <span class="text-danger">*</span></label>
+                          <input type="text" id="Email" class="form-control" value="demo@sample.com" />
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="form-label" for="url">Portfolio Url</label>
+                          <input type="text" id="url" class="form-control" value="https://demo.com" />
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="form-label">Address</label>
+                          <textarea class="form-control" placeholder="Enter Your Address">
+3379  Monroe Avenue, Fort Myers, Florida(33912)</textarea
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </app-card>
+                </div>
+                <div class="col-md-6">
+                  <app-card cardTitle="Social Information">
+                    <div class="form-group" *ngFor="let task of socialMedia">
+                      <label class="form-label">{{ task.media }}</label>
+                      <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="{{ task.icon }}"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Profile Url" />
+                        <button class="btn text-white border-0 shadow-none {{ task.bgColor }}" type="button"> Connect </button>
+                      </div>
+                    </div>
+                  </app-card>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="3">
+            <a href="javascript:" ngbNavLink class="nav-link"> <i class="material-icons-two-tone me-2">library_books</i>My Account </a>
+            <ng-template ngbNavContent>
+              <app-card cardTitle="General Settings">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="form-label" for="Username">Username <span class="text-danger">*</span></label>
+                      <input type="text" id="Username" class="form-control" value="Ashoka_Tano_16" />
+                      <small class="form-text text-muted">Your Profile URL: https://pc.com/Ashoka_Tano_16</small>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="form-label" for="Account Email">Account Email <span class="text-danger">*</span></label>
+                      <input type="text" id="Account Email" class="form-control" value="demo@sample.com" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="form-label">Language</label>
+                      <select class="form-control" title="select">
+                        <option>Washington</option>
+                        <option>India</option>
+                        <option>Africa</option>
+                        <option>New York</option>
+                        <option>Malesia</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="form-label">Signin Using</label>
+                      <select class="form-control" title="select">
+                        <option>Password</option>
+                        <option>Face Recognition</option>
+                        <option>Thumb Impression</option>
+                        <option>Key</option>
+                        <option>Pin</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </app-card>
+              <div class="card border">
+                <div class="card-header">
+                  <h5>Advance Settings</h5>
+                </div>
+                <div class="card-body">
+                  <div *ngFor="let setting of settings; let i = index">
+                    <h5 class="mb-3 mt-4">{{ setting.title }}</h5>
+                    <div class="form-group">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="customsecbrz{{ i }}" checked />
+                        <label class="form-check-label" for="customsecbrz{{ i }}">{{ setting.text }}</label>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <h5 class="mb-4">Recognized Devices</h5>
+                  <div class="media mb-2" *ngFor="let task of deviceList">
+                    <i class="feather {{ task.icon }} f-20 h3 me-3 wid-30 text-center"></i>
+                    <div class="media-body">
+                      <div class="float-end">
+                        <div class="{{ task.color }} d-inline-block me-2">
+                          <i class="fas fa-circle f-10 me-2"></i>
+                          {{ task.status }}
+                        </div>
+                        <a href="javascript:" class="text-danger" title="close"><i class="feather icon-x-circle"></i></a>
+                      </div>
+                      <span class="text-dark font-weight-bold">{{ task.title }}</span>
+                      <small class="text-muted">{{ task.describe }}</small>
+                    </div>
+                  </div>
+                  <hr />
+                  <h5 class="mb-3">Active Sessions</h5>
+                  <div class="media mb-2" *ngFor="let session of sessions">
+                    <i class="feather icon-monitor f-20 h3 me-3 wid-30 text-center text-success"></i>
+                    <div class="media-body">
+                      <div class="float-end">
+                        <a href="javascript:" class="badge bg-light-danger">Logout</a>
+                      </div>
+                      <span class="text-dark font-weight-bold">{{ session.title }}</span>
+                      <small class="text-muted">{{ session.describe }}</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer text-end">
+                  <button class="btn btn-success">Update Profile</button>
+                  <button class="btn btn-outline-dark ms-2">Clear</button>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="4">
+            <a href="javascript:" ngbNavLink class="nav-link"> <i class="material-icons-two-tone me-2">lock</i>Change Password </a>
+            <ng-template ngbNavContent>
+              <div class="alert alert-warning" role="alert">
+                <h5 class="alert-heading"> <i class="feather icon-alert-circle me-2"></i>Alert! </h5>
+                <p> Your Password will expire in every 3 months. So change it periodically. </p>
+                <hr />
+                <p class="mb-0"><b>Do not share your password</b></p>
+              </div>
+              <div class="card border">
+                <div class="card-header">
+                  <h5>Change Password</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="form-label">Current Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" placeholder="Enter Your current password" />
+                        <small class="form-text text-muted">Forgot password? <a href="javascript:">Click here</a></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" [formGroup]="pwForm">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="form-label">New Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" placeholder="Enter New Password" formControlName="pw" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" placeholder="Enter Confirm Password" formControlName="check" />
+                      </div>
+                    </div>
+                  </div>
+                  {{ pwForm.errors | json }}
+                </div>
+                <div class="card-footer text-end">
+                  <button class="btn btn-danger">Change Password</button>
+                  <button class="btn btn-outline-dark ms-2">Clear</button>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="5">
+            <a href="javascript:" ngbNavLink class="nav-link"> <i class="material-icons-two-tone me-2">email</i>Settings </a>
+            <ng-template ngbNavContent>
+              <div class="card border">
+                <div class="card-header">
+                  <h5>Email Settings</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item py-4">
+                    <h5 class="mb-3">Setup Email Notification</h5>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+                      <label class="form-check-label" for="flexSwitchCheckDefault">Email Notification</label>
+                    </div>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault1" />
+                      <label class="form-check-label" for="flexSwitchCheckDefault1">Send Copy To Personal Email</label>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-4">
+                    <h5 class="mb-3">Activity Related Emails</h5>
+
+                    <h6 class="mt-4 mb-2">When to email?</h6>
+                    <div class="form-check form-switch" *ngFor="let task of activityRelated">
+                      <input class="form-check-input" type="checkbox" id="customCheckactmail1" checked />
+                      <label class="form-check-label" for="customCheckactmail1">{{ task.activity }}</label>
+                    </div>
+                    <h6 class="mt-4 mb-2">When to escalate emails?</h6>
+                    <div class="form-check form-switch" *ngFor="let task of activityRelated2">
+                      <input class="form-check-input" type="checkbox" id="customCheckactmail4" checked />
+                      <label class="form-check-label" for="customCheckactmail4">{{ task.activity }}</label>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-4 border-bottom-0">
+                    <h5 class="mb-3">Updates From System Notification</h5>
+                    <h6 class="mt-4 mb-2">Email you with?</h6>
+                    <div class="form-check" *ngFor="let task of activityRelated3">
+                      <input class="form-check-input" type="checkbox" id="customCheckactmail7" checked />
+                      <label class="form-check-label" for="customCheckactmail7">{{ task.activity }}</label>
+                    </div>
+                  </li>
+                </ul>
+                <div class="card-footer text-end">
+                  <button class="btn btn-primary">Update Change</button>
+                  <button class="btn btn-outline-dark ms-2">Clear</button>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+  <!-- [ sample-page ] end -->
+</div>

@@ -1,0 +1,360 @@
+<nav class="navbar navbar-expand-md navbar-light default">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/default']">
+      <img src="assets/images/logo.svg" alt="logo" />
+    </a>
+    <button class="navbar-toggler" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link f-w-500" [routerLink]="['/landing']">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link f-w-500" [routerLink]="['/default']">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link me-2 f-w-500" href="https://codedthemes.gitbook.io/berry-angular/" target="_blank">Document</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-secondary f-w-500" href="https://codedthemes.com/item/berry-angular-admin-dashboard-template/" target="_blank"
+            >Purchase Now</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- [ Nav ] start -->
+<!-- [ Header ] start -->
+<header id="home">
+  <div class="container">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-5 col-xl-4">
+        <h1 class="mt-sm-3 mb-sm-4 f-w-600 wow fadeInUp"> Build Your Next Project With<span class="text-primary">Berry</span> </h1>
+        <h4 class="mb-sm-4 text-muted wow fadeInUp" data-wow-delay="0.4s">
+          Berry is React based admin template which helps you to build faster and beautiful web applications.
+        </h4>
+        <div class="my-3 my-xl-5 wow fadeInUp" data-wow-delay="0.6s">
+          <a [routerLink]="['/guest/guestV1/guestV1-login']" class="btn btn-secondary me-2">Live Demo</a>
+          <a href="https://codedthemes.com/item/berry-angular-admin-dashboard-template/" class="btn btn-link-primary" target="_blank"
+            >Purchase Now</a
+          >
+        </div>
+        <div class="mb-4 mb-lg-0 d-inline-flex align-items-center wow fadeInUp" data-wow-delay="0.8s">
+          <div class="flex-shrink-0">
+            <img src="assets/images/bootstrap.svg" alt="bootstrap icon" />
+          </div>
+          <div class="flex-grow-1 ms-3">
+            <h5 class="mb-0 text-start">
+              <b>Built with Bootstrap</b> <span class="text-muted"> © - The most popular React Component Library. </span></h5
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="hero-image">
+          <img src="assets/images/landing/img-home-bg.png" alt="image" class="img-fluid img-bg" />
+          <div class="img-widget-1">
+            <img src="assets/images/landing/img-home-1.png" alt="image" class="img-fluid" />
+          </div>
+          <div class="img-widget-2">
+            <img src="assets/images/landing/img-home-2.png" alt="image" class="img-fluid" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- [ Header ] End -->
+<!-- [ Top Features ] start -->
+<section class="key-features">
+  <div class="container title">
+    <div class="row wow fadeInUp" data-wow-delay="0.2s">
+      <div class="col-md-10 col-xl-4">
+        <h5 class="text-primary mb-0">Top Features</h5>
+        <h2 class="my-3">What Berry brings to you?</h2>
+        <p class="mb-0"> Berry is a solid dashboard template for your next project, with the following top features. </p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-sm-6 col-lg-4">
+        <div class="features-block text-center wow fadeInUp" data-wow-delay="0.4s">
+          <div class="avtar avtar-xl bg-light-primary">
+            <i class="material-icons-two-tone text-primary f-34">palette</i>
+          </div>
+          <h3 class="my-3"><b>Beautiful User Interface</b></h3>
+          <p class="mb-0 text-muted"> Warm color palates and minimally designed interfaces make the user experience more comfortable. </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="features-block text-center wow fadeInUp" data-wow-delay="0.6s">
+          <div class="avtar avtar-xl bg-light-secondary">
+            <i class="material-icons-two-tone text-secondary f-34">reorder</i>
+          </div>
+          <h3 class="my-3"><b>Modern Technology Stack</b></h3>
+          <p class="mb-0 text-muted">
+            Technology behind Berry is less complicated so you can focus on creating the actual web applications.
+          </p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="features-block text-center wow fadeInUp" data-wow-delay="0.8s">
+          <div class="avtar avtar-xl bg-light-success">
+            <i class="material-icons-two-tone text-success f-34">speed</i>
+          </div>
+          <h3 class="my-3"><b>Performance Centric</b></h3>
+          <p class="mb-0 text-muted"> Code that makes it easier and faster to render the page for your web applications. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ Top Features ] End -->
+<!-- [ Demo ] start -->
+<section>
+  <div class="container title">
+    <div class="row">
+      <div class="col-md-10 col-xl-4 wow fadeInUp" data-wow-delay="0.2s">
+        <h5 class="text-primary mb-0">Demos</h5>
+        <h2 class="my-3">Pre-build Dashboard & Apps</h2>
+        <p class="mb-0"> Berry has customized pages with Material-UI components, Apps, Forms and lots more to explore. </p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-sm-6 col-md-4">
+        <a href="javascript:">
+          <img src="assets/images/landing/img-demo-1.jpg" alt="img" class="rounded img-fluid mb-3 wow fadeInUp" data-wow-delay="0.2s" />
+        </a>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <a href="javascript:">
+          <img src="assets/images/landing/img-demo-2.jpg" alt="img" class="rounded img-fluid mb-3 wow fadeInUp" data-wow-delay="0.4s" />
+        </a>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <a href="javascript:">
+          <img src="assets/images/landing/img-demo-3.jpg" alt="img" class="rounded img-fluid mb-3 wow fadeInUp" data-wow-delay="0.4s" />
+        </a>
+      </div>
+      <div class="col-12 mt-4 text-center wow fadeInUp" data-wow-delay="0.5s">
+        <button class="btn btn-outline-primary">Explore Components</button>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ Demo ] End -->
+<!-- [ Layout ] start -->
+<section class="layout">
+  <div class="container">
+    <div class="row align-items-center layout-block wow fadeInUp" data-wow-delay="0.2s">
+      <div class="col-6">
+        <div class="layout-img-block">
+          <img src="assets/images/landing/img-layout1.png" alt="image" class="img-fluid img-layout" />
+          <img src="assets/images/landing/img-layout1-bg.png" alt="image" class="img-fluid" />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="layout-content">
+          <h4><b>Dark Layout</b></h4>
+          <p class="text-muted"> Modern, sleek and elegant dark color scheme that looks great in a dark variant. </p>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center layout-block wow fadeInUp" data-wow-delay="0.4s">
+      <div class="col-6">
+        <div class="layout-content">
+          <h4><b>RTL</b></h4>
+          <p class="text-muted"> Fully Support Right-to-left (RTL) design variant. </p>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="layout-img-block">
+          <img src="assets/images/landing/img-layout2.png" alt="image" class="img-fluid img-layout" />
+          <img src="assets/images/landing/img-layout2-bg.png" alt="image" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center layout-block wow fadeInUp" data-wow-delay="0.6s">
+      <div class="col-6">
+        <div class="layout-img-block">
+          <img src="assets/images/landing/img-layout3.png" alt="image" class="img-fluid img-layout" />
+          <img src="assets/images/landing/img-layout3-bg.png" alt="image" class="img-fluid" />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="layout-content">
+          <h4><b>Dark Layout</b></h4>
+          <p class="text-muted"> Support Multi-language. Added 4 pre-filled language. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ Layout ] End -->
+<!-- [ Key Features ] start -->
+<section class="key-features">
+  <div class="container title wow fadeInUp" data-wow-delay="0.2s">
+    <div class="row">
+      <div class="col-md-10 col-xl-4">
+        <h5 class="text-primary mb-0">Key Features</h5>
+        <h2 class="my-3">Know more about Berry</h2>
+        <p class="mb-0"> If you're in need of a web app that is both user-friendly and scalable, this is the template for you. </p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.4s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-primary">
+              <i class="material-icons-two-tone text-primary">folder</i>
+            </div>
+            <h5 class="mb-0 ms-3">Easy Folder Structure</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.6s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-secondary">
+              <i class="material-icons-two-tone text-secondary">code</i>
+            </div>
+            <h5 class="mb-0 ms-3">Organized Code Structure</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.8s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-primary">
+              <i class="material-icons-two-tone text-primary">insert_emoticon</i>
+            </div>
+            <h5 class="mb-0 ms-3">The Hassle-free Setup Process</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-secondary">
+              <i class="material-icons-two-tone text-secondary">lock_open</i>
+            </div>
+            <h5 class="mb-0 ms-3">3 Auth Methods</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.4s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-secondary">
+              <i class="material-icons-two-tone text-secondary">attachment</i>
+            </div>
+            <h5 class="mb-0 ms-3">React Hooks</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.6s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-primary">
+              <i class="material-icons-two-tone text-primary">call_split</i>
+            </div>
+            <h5 class="mb-0 ms-3">Code Splitting</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp" data-wow-delay="0.8s">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-secondary">
+              <i class="material-icons-two-tone text-secondary">text_fields</i>
+            </div>
+            <h5 class="mb-0 ms-3">Google Fonts</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 col-xl-3">
+        <div class="features-block wow fadeInUp">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-l bg-light-primary">
+              <i class="material-icons-two-tone text-primary">design_services</i>
+            </div>
+            <h5 class="mb-0 ms-3">Figma Design Files</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-3 mt-md-5 wow fadeInUp">
+      <button class="btn btn-primary">Get Berry</button>
+      <button class="btn btn-link-primary">Know More</button>
+    </div>
+  </div>
+</section>
+<!-- [ Key Features ] End -->
+<!-- [ Subscribe ] start -->
+<section class="subscribe">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-5 text-end my-1">
+        <img src="assets/images/landing/img-groupmail.png" alt="logo" class="img-fluid img-mail" />
+      </div>
+      <div class="col-lg-7 my-1">
+        <div class="subscribe-block wow zoomIn" data-wow-delay="0.6s">
+          <h2 class="f-w-900 mb-0">Subscribe</h2>
+          <p class="my-3 my-mb-4"> Subscribe for the latest news & updates of Berry admin template. We never send spam newsletters. </p>
+          <div class="media align-items-center">
+            <div class="media-body me-3">
+              <div class="form-floating mb-0">
+                <input type="email" class="form-control" id="floatingaddcomment" placeholder="Email Address" />
+                <label for="floatingaddcomment">Email Address</label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg">Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ Subscribe ] End -->
+<!-- [ footer ] start -->
+<footer class="footer bg-secondary">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col my-1">
+        <img src="assets/images/logo-white.svg" alt="logo" class="img-fluid" />
+      </div>
+      <div class="col-auto my-1">
+        <ul class="list-inline footer-link mb-0">
+          <li class="list-inline-item">
+            <a href="javascript:"><i class="ti ti-brand-instagram"></i>Blog</a>
+          </li>
+          <li class="list-inline-item">
+            <a href="javascript:"><i class="ti ti-brand-facebook"></i>Facebook</a>
+          </li>
+          <li class="list-inline-item">
+            <a href="javascript:"><i class="ti ti-brand-twitter"></i>Twitter</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="sub-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <p class="mb-0 text-white">&copy; CodedThemes</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- [ footer ] End -->
+<!-- [ Main Content ] end -->

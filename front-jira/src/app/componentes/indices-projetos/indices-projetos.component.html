@@ -1,0 +1,390 @@
+<div class="row" *ngIf="!consultando">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Filtros</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="sprintSelect">Sprint</label>
+              <select class="form-control" id="sprintSelect" [(ngModel)]="filtroSprint" (change)="carregarUsuarios()">
+                <option value="">Todas</option>
+                <option [value]="sprint.ds_sprint" *ngFor="let sprint of sprints">{{sprint.ds_sprint}}: de {{sprint.dt_inicial_sprint | date : 'dd/MM/yyyy'}} à {{sprint.dt_final_sprint | date : 'dd/MM/yyyy'}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="filter_task" class="form-label">Task</label>
+              <input type="text" class="form-control" id="filter_task" name="filter_task" aria-describedby="Task" placeholder="Task" [(ngModel)]="filtroTask" (change)="carregarUsuarios()"/>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="userSelect">Pessoa</label>
+              <select class="form-control" [(ngModel)]="filtroUsuario" id="userSelect" >
+                <option value="">{{'Todos'}}</option>
+                <option [value]="usuario" *ngFor="let usuario of usuarios">{{usuario}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pnl-search">
+              <button class="btn btn-primary" (click)="consultar()">Consultar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div *ngIf="consultando" style="width:100%; height:100%; text-align: center; vertical-align: middle;">
+      <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div> 
+      <h1>Consultando, aguarde...</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="buscaEfetuada && !consultando">
+  <div class="col-md-3">
+    <div class="card bg-primary order-card">
+      <div class="card-body">
+        <h5 class="text-white">Tasks</h5>
+        <h3 class="text-white">{{qtdTotalTarefas}}</h3>
+        <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success order-card">
+      <div class="card-body">
+        <h5 class="text-white">Tasks concluídas</h5>
+        <h3 class="text-white">{{statusConcluidas}}</h3>
+        <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-secondary order-card">
+      <div class="card-body">
+        <h5 class="text-white">Retrabalho de DEV</h5>
+        <h3 class="text-white">{{perTempoRetrabalhoDev.toFixed(2).replaceAll('.',',')}}%</h3>
+        <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-code"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-danger order-card">
+      <div class="card-body">
+        <h5 class="text-white">Retrabalho de QA</h5>
+        <h3 class="text-white">{{perTempoRetrabalhoQa.toFixed(2).replaceAll('.',',')}}%</h3>
+        <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-hand-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5" /><path d="M11 5.5v-2a1.5 1.5 0 1 1 3 0v8.5" /><path d="M14 5.5a1.5 1.5 0 0 1 3 0v6.5" /><path d="M17 7.5a1.5 1.5 0 0 1 3 0v8.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" /></svg></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5>Tarefas de melhoria
+                  <span class="float-end">{{ qtdTarefasMelhoria }} = {{ percentualTarefasAnalisadas(qtdTarefasMelhoria,
+                    qtdTotalTarefas) }}%</span>
+                </h5>
+                <div class="progress">
+                  <div class="progress-bar bg-primary bg-primary"
+                    [style]="'width: ' + percentualTarefasAnalisadas(qtdTarefasMelhoria, qtdTotalTarefas) + '%'"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5>Tarefas de correções de erros
+                  <span class="float-end">{{ qtdTarefasBugs }} = {{ percentualTarefasAnalisadas(qtdTarefasBugs,
+                    qtdTotalTarefas) }}%</span>
+                </h5>
+                <div class="progress">
+                  <div class="progress-bar bg-danger bg-danger"
+                    [style]="'width: ' + percentualTarefasAnalisadas(qtdTarefasBugs, qtdTotalTarefas) + '%'"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h5>Tarefas com retrabalho
+                  <span class="float-end">{{ qtdTarefasRetornos }} = {{ percentualTarefasAnalisadas(qtdTarefasRetornos,
+                    qtdTotalTarefas) }}%</span>
+                </h5>
+                <div class="progress">
+                  <div class="progress-bar bg-danger bg-danger"
+                    [style]="'width: ' + percentualTarefasAnalisadas(qtdTarefasBugs, qtdTotalTarefas) + '%'"></div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-md-6 text-center">
+                    <p class="text-muted m-b-5 f-14">Tarefas de melhorias com retrabalho</p>
+                    <h6 class="f-w-900">{{ qtdTarefasMelhoriaRetornos }} =
+                      {{ percentualTarefasAnalisadas(qtdTarefasMelhoriaRetornos, qtdTarefasRetornos) }}%</h6>
+                  </div>
+                  <div class="col-md-6 text-center">
+                    <p class="text-muted m-b-5 f-14">Tarefas de bugs com retrabalho</p>
+                    <h6 class="f-w-900">{{ qtdTarefasBugsRetornos }} = {{
+                      percentualTarefasAnalisadas(qtdTarefasBugsRetornos, qtdTarefasRetornos) }}%</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card" style="height: 85%;">
+              <div class="card-body">
+                <br />
+                <div class="row align-items-center">
+                  <div class="col">
+                    <i class="material-icons-two-tone text-danger mb-1 f-26">bug_report</i>
+                    <h5 class="mb-0 text-muted">Quantidade de retornos de tarefas</h5>
+                  </div>
+                  <div class="col text-end">
+                    <h1 class="mb-0">{{qtdRetornosTarefas}}</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h5>Usuários envolvidos e horas lançadas</h5>
+      </div>
+      <div class="card-body">
+        <p class="m-b-10 link" *ngFor="let user of usuariosEnvolvidos" (click)="atualizarUsuario(user.name)">
+          {{user.name}}: {{user.time}} horas
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card trafic-card">
+      <div class="card-header">
+        <h5>Tarefas por status <span class="float-end">{{ qtdTotalTarefas }}</span></h5>
+      </div>
+      <div class="card-body">
+        <p class="m-b-10">
+          Pendente
+          <span class="float-end">{{ statusTodo }} = {{ percentualTarefasAnalisadas(statusTodo, qtdTotalTarefas)
+            }}%</span>
+        </p>
+        <div class="progress blue">
+          <div class="progress-bar bg-primary"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusTodo, qtdTotalTarefas) + '%'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em andamento
+          <span class="float-end">{{ statusAndamento }} = {{ percentualTarefasAnalisadas(statusAndamento,
+            qtdTotalTarefas) }}%</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-warning"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusAndamento, qtdTotalTarefas) + '%'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em review
+          <span class="float-end">{{ statusReview }} = {{ percentualTarefasAnalisadas(statusReview, qtdTotalTarefas)
+            }}%</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-warning"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusReview, qtdTotalTarefas) + '%'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando deploy em homologação
+          <span class="float-end">{{ statusAguardandoDeployHomol }} = {{
+            percentualTarefasAnalisadas(statusAguardandoDeployHomol, qtdTotalTarefas) }}%</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusAguardandoDeployHomol, qtdTotalTarefas) + '%'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando testes
+          <span class="float-end">{{ statusAguardandoTeste }} = {{
+            percentualTarefasAnalisadas(statusAguardandoTeste, qtdTotalTarefas) }}%</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusAguardandoTeste, qtdTotalTarefas) + '%'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em testes
+          <span class="float-end">{{ statusTeste }} = {{ percentualTarefasAnalisadas(statusTeste, qtdTotalTarefas)
+            }}%</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-info"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusTeste, qtdTotalTarefas) + '%'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando deploy em produção
+          <span class="float-end">{{ statusAguardandoDeployProducao }} =
+            {{ percentualTarefasAnalisadas(statusAguardandoDeployProducao, qtdTotalTarefas) }}%</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width: ' + percentualTarefasAnalisadas(statusAguardandoDeployProducao, qtdTotalTarefas) + '%'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Concluídas
+          <span class="float-end">{{ statusConcluidas }} = {{
+            percentualTarefasAnalisadas(statusConcluidas, qtdTotalTarefas) }}%</span>
+        </p>
+        <div class="progress green">
+          <div class="progress-bar bg-success"
+            [style]="'width: ' + percentualTarefasAnalisadas(tempoStatusConcluidas, tempoTotalTarefas) + '%'">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card trafic-card">
+      <div class="card-header">
+        <h5>Tempo médio de permanência por status</h5>
+      </div>
+      <div class="card-body">
+        <p class="m-b-10">
+          Pendente
+          <span class="float-end">{{ tempoStatusTodo.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress blue">
+          <div class="progress-bar bg-primary"
+            [style]="'width:  0;'"></div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em andamento
+          <span class="float-end">{{ tempoStatusAndamento.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-warning"
+            [style]="'width: 0;'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em review
+          <span class="float-end">{{ tempoStatusReview.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-warning"
+            [style]="'width:  0;'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando deploy em homologação
+          <span class="float-end">{{ tempoStatusAguardandoDeployHomol.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width:  0;'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando testes
+          <span class="float-end">{{ tempoStatusAguardandoTeste.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width:  0;'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Em testes
+          <span class="float-end">{{ tempoStatusTeste.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress yellow">
+          <div class="progress-bar bg-info"
+            [style]="'width:  0;'">
+          </div>
+        </div>
+        <p class="m-b-10 m-t-30">
+          Aguardando deploy em produção
+          <span class="float-end">{{ tempoStatusAguardandoDeployProducao.toFixed(0) }} dias</span>
+        </p>
+        <div class="progress red">
+          <div class="progress-bar bg-danger"
+            [style]="'width: 0;'">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Tasks</h5>
+      </div>
+      <div class="card-body table-border-style">
+        <div class="table-responsive">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Tempos</th>
+                <th>Quantidade de retornos</th>
+                <th>Usuários envolvidos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of lstTasks">
+                <td>{{task.id}}</td>
+                <td>{{task.descricao}}</td>
+                <td>
+                  <span *ngIf="task.status === 'TAREFAS PENDENTES'" class="badge rounded-pill bg-primary">Pendente</span>
+                  <span *ngIf="task.status === 'EM ANDAMENTO'"class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+                  <span *ngIf="task.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
+                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+                  <span *ngIf="task.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
+                  <span *ngIf="task.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
+                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
+                  <span *ngIf="task.status === 'CONCLUÍDO'" class="badge rounded-pill bg-success">Concluída</span>
+                </td>
+                <td>
+                  <p>{{task.tempoLancadoSprint}} horas lançadas na sprint</p>
+                  <p>{{task.tempoLancadoTotal}} horas totais lançadas</p>
+                  <p>{{task.tempoEmStatusGasto}} dias desde o início</p>
+                  <p>{{task.tempoEmRetrabalhoStatus}} dias em retrabalho desde o início</p>
+                </td>
+                <td>{{task.quantidadeRetornos}}</td>
+                <td><p *ngFor="let user of task.usuariosEnvolvidos">
+                  {{user.name}}: {{user.time}} horas
+                </p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

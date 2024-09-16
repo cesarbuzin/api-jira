@@ -1,0 +1,33 @@
+<div class="table-responsive">
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="text-end">Quantity</th>
+        <th class="text-end">Amount</th>
+        <th class="text-end">Total</th>
+        <th class="text-end"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of itemList">
+        <td>
+          <div>
+            <h5 class="mb-1">{{ task.name }}</h5>
+            <p class="mb-0 text-muted">
+              {{ task.dis }}
+            </p>
+          </div>
+        </td>
+        <td class="text-end">{{ task.quantity }}</td>
+        <td class="text-end">{{ task.amount }}</td>
+        <td class="text-end">{{ task.total }}</td>
+        <td class="text-end" *ngIf="trash">
+          <button type="button" class="btn btn-link-danger" title="Delete">
+            <i class="ti ti-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

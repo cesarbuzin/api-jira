@@ -1,0 +1,190 @@
+<div class="taskboard page-height">
+  <div class="taskboard-wrapper">
+    <div class="taskboard-list">
+      <div class="taskboard-header">
+        <input type="text" placeholder="backlogTask" class="form-control flex-grow-1" value="Backlog" />
+        <div class="ms-2">
+          <a href="javascript:" class="avtar avtar-s btn-link-danger" title="Delete">
+            <i class="ti ti-trash f-18"></i>
+          </a>
+        </div>
+      </div>
+      <ng-scrollbar style="height: calc(100vh - 480px)" visibility="hover">
+        <div class="taskboard-cards" [dragula]="'task-group'">
+          <div class="taskboard-task" *ngFor="let board of boardList">
+            <div>
+              <div class="float-end">
+                <div class="dropdown" ngbDropdown>
+                  <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                    <i class="ti ti-dots f-18"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:">Edit</a>
+                    <a class="dropdown-item" href="javascript:">Delete</a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:">
+                <h5 class="mb-1 text-truncate">
+                  {{ board.header }}
+                </h5>
+              </a>
+              <a href="javascript:" class="link-secondary text-sm"
+                ><i class="material-icons-two-tone text-secondary f-16 me-1">menu_book</i> {{ board.des }}</a
+              >
+              <img src="{{ board.img }}" class="img-fluid rounded mt-2" alt="image" />
+            </div>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+  <div class="taskboard-wrapper">
+    <div class="taskboard-list">
+      <div class="taskboard-header">
+        <input type="text" placeholder="NewTask" class="form-control flex-grow-1" value="New" />
+        <div class="ms-2">
+          <a href="javascript:" class="avtar avtar-s btn-link-danger" title="Delete">
+            <i class="ti ti-trash f-18"></i>
+          </a>
+        </div>
+      </div>
+      <ng-scrollbar style="height: calc(100vh - 480px)" visibility="hover">
+        <div class="taskboard-cards" [dragula]="'task-group'">
+          <div class="taskboard-task" *ngFor="let list of newList">
+            <div>
+              <div class="float-end">
+                <div class="dropdown" ngbDropdown>
+                  <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                    <i class="ti ti-dots f-18"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:">Edit</a>
+                    <a class="dropdown-item" href="javascript:">Delete</a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:">
+                <h5 class="mb-1 taskboard-task-title text-truncate">{{ list.title }}</h5>
+              </a>
+              <a href="javascript:" class="link-secondary text-sm"
+                ><i class="material-icons-two-tone text-secondary f-16 me-1">menu_book</i>{{ list.text }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+  <div class="taskboard-wrapper">
+    <div class="taskboard-list">
+      <div class="taskboard-header">
+        <input type="text" placeholder="ActiveTask" class="form-control flex-grow-1" value="Active" />
+        <div class="ms-2">
+          <a href="javascript:" class="avtar avtar-s btn-link-danger" title="Delete">
+            <i class="ti ti-trash f-18"></i>
+          </a>
+        </div>
+      </div>
+      <ng-scrollbar style="height: calc(100vh - 480px)" visibility="hover">
+        <div class="taskboard-cards" [dragula]="'task-group'">
+          <div class="taskboard-task task-status-warning" *ngFor="let progress of progressList">
+            <div>
+              <div class="float-end">
+                <div class="dropdown" ngbDropdown>
+                  <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                    <i class="ti ti-dots f-18"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:">Edit</a>
+                    <a class="dropdown-item" href="javascript:">Delete</a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:">
+                <h5 class="mb-1 taskboard-task-title text-truncate">{{ progress.title }}</h5>
+              </a>
+              <a href="javascript:" class="link-secondary text-sm"
+                ><i class="material-icons-two-tone text-secondary f-16 me-1">menu_book</i>{{ progress.text }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+  <div class="taskboard-wrapper">
+    <div class="taskboard-list">
+      <div class="taskboard-header">
+        <input type="text" placeholder="ResolveTask" class="form-control flex-grow-1" value="Resolve" />
+        <div class="ms-2">
+          <a href="javascript:" class="avtar avtar-s btn-link-danger" title="Delete">
+            <i class="ti ti-trash f-18"></i>
+          </a>
+        </div>
+      </div>
+      <ng-scrollbar style="height: calc(100vh - 480px)" visibility="hover">
+        <div class="taskboard-cards" [dragula]="'task-group'">
+          <div class="taskboard-task task-status-info" *ngFor="let review of reviewList">
+            <div>
+              <div class="float-end">
+                <div class="dropdown" ngbDropdown>
+                  <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                    <i class="ti ti-dots f-18"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:">Edit</a>
+                    <a class="dropdown-item" href="javascript:">Delete</a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:">
+                <h5 class="mb-1 taskboard-task-title text-truncate">{{ review.title }}</h5>
+              </a>
+              <a href="javascript:" class="link-secondary text-sm"
+                ><i class="material-icons-two-tone text-secondary f-16 me-1">menu_book</i>{{ review.text }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+  <div class="taskboard-wrapper">
+    <div class="taskboard-list">
+      <div class="taskboard-header">
+        <input type="text" placeholder="CloseTask" class="form-control flex-grow-1" value="Close" />
+        <div class="ms-2">
+          <a href="javascript:" class="avtar avtar-s btn-link-danger" title="Delete">
+            <i class="ti ti-trash f-18"></i>
+          </a>
+        </div>
+      </div>
+      <ng-scrollbar style="height: calc(100vh - 480px)" visibility="hover">
+        <div class="taskboard-cards" [dragula]="'task-group'">
+          <div class="taskboard-task task-status-success" *ngFor="let list of doneList">
+            <div>
+              <div class="float-end">
+                <div class="dropdown" ngbDropdown>
+                  <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" type="button" ngbDropdownToggle>
+                    <i class="ti ti-dots f-18"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:">Edit</a>
+                    <a class="dropdown-item" href="javascript:">Delete</a>
+                  </div>
+                </div>
+              </div>
+              <a href="javascript:">
+                <h5 class="mb-1 taskboard-task-title text-truncate">{{ list.title }}</h5>
+              </a>
+              <a href="javascript:" class="link-secondary text-sm"
+                ><i class="material-icons-two-tone text-secondary f-16 me-1">menu_book</i>{{ list.text }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+</div>

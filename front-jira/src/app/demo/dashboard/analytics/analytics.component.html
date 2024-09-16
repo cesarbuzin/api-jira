@@ -1,0 +1,165 @@
+<div class="row">
+  <div class="col-xl-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="row justify-content-between align-items-center">
+          <div class="col-auto">
+            <h3>Market Share</h3>
+          </div>
+          <div class="col-auto">
+            <h3> <i class="feather icon-trending-down text-danger mx-2"></i>27, 695.65 </h3>
+          </div>
+        </div>
+        <p class="mb-3">Department wise monthly sales report</p>
+        <div class="row align-items-center mb-3">
+          <div class="col-auto mb-3">
+            <div class="d-inline-flex align-items-center">
+              <div class="avtar bg-light-secondary">
+                <i class="ti ti-brand-facebook text-secondary"></i>
+              </div>
+              <h4 class="mb-0 ms-2">+45.36%</h4>
+            </div>
+          </div>
+          <div class="col-auto mb-3">
+            <div class="d-inline-flex align-items-center">
+              <div class="avtar bg-light-primary">
+                <i class="ti ti-brand-twitter text-primary"></i>
+              </div>
+              <h4 class="mb-0 ms-2">- 50.69%</h4>
+            </div>
+          </div>
+          <div class="col-auto mb-3">
+            <div class="d-inline-flex align-items-center">
+              <div class="avtar bg-light-danger">
+                <i class="ti ti-brand-youtube text-danger"></i>
+              </div>
+              <h4 class="mb-0 ms-2">+ 16.85%</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accountChart">
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [dataLabels]="chartOptions.dataLabels"
+          [plotOptions]="chartOptions.plotOptions"
+          [responsive]="chartOptions.responsive"
+          [stroke]="chartOptions.stroke"
+          [colors]="preset"
+          [fill]="chartOptions.fill"
+          [tooltip]="chartOptions.tooltip"
+        ></apx-chart>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" *ngFor="let card of cards">
+        <div class="card {{ card.color }} order-card">
+          <div class="card-body">
+            <h5 class="text-white">{{ card.title }}</h5>
+            <h3 class="text-white">{{ card.amount }}</h3>
+            <p class="m-b-0">{{ card.text }}</p>
+            <i class="material-icons-two-tone d-block f-46 card-icon text-white">{{ card.icon }}</i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="card-header">
+        <h5>Latest Customers</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <ng-scrollbar style="height: 310px; position: relative" visibility="hover" track="all">
+            <table class="table table-hover table-borderless">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Country</th>
+                  <th>Name</th>
+                  <th class="text-end">Average</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let task of tableList">
+                  <td>
+                    <img src="{{ task.src }}" alt="widget-img" class="img-fluid wid-30" />
+                  </td>
+                  <td>{{ task.country }}</td>
+                  <td>{{ task.name }}</td>
+                  <td class="text-end">{{ task.average }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-scrollbar>
+        </div>
+        <div class="text-end m-r-20 pt-4">
+          <a href="#!" class="b-b-primary text-primary">View all Latest Customers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4">
+    <div class="card flat-card">
+      <div class="row-table">
+        <div class="col-sm-6 card-body w-50 br" *ngFor="let list of rowTable1">
+          <div class="row g-1">
+            <div class="col-4">
+              <div class="b-icons bg-light-primary">
+                <i class="material-icons-two-tone text-secondary">{{ list.icon }}</i>
+              </div>
+            </div>
+            <div class="col-8 text-md-center">
+              <h5>{{ list.value }}</h5>
+              <span>{{ list.ship }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row-table">
+        <div class="col-sm-6 card-body w-50 br" *ngFor="let list of rowTable">
+          <div class="row g-1">
+            <div class="col-4">
+              <div class="b-icons bg-light-primary">
+                <i class="material-icons-two-tone text-secondary">{{ list.icon }}</i>
+              </div>
+            </div>
+            <div class="col-8 text-md-center">
+              <h5>{{ list.value }}</h5>
+              <span>{{ list.ship }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card table-card">
+      <div class="card-header borderless">
+        <h5>Total Revenue</h5>
+      </div>
+      <div class="card-body px-0 py-0">
+        <div class="table-responsive">
+          <ng-scrollbar style="height: 310px; position: relative" visibility="hover">
+            <table class="table table-hover mb-0">
+              <tbody>
+                <tr *ngFor="let task of revenueList">
+                  <td><i class="fas fa-caret-up {{ task.color }}  f-24"></i></td>
+                  <td>{{ task.name }}</td>
+                  <td>
+                    <h6 class="{{ task.color }}">{{ task.percentage }}</h6>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-scrollbar>
+        </div>
+      </div>
+    </div>
+    <div class="card {{ card.color }} text-white widget-visitor-card" *ngFor="let card of dailyCard">
+      <div class="card-body text-center">
+        <h2 class="text-white">{{ card.amount }}</h2>
+        <p class="text-white mb-0">{{ card.title }}</p>
+        <i class="material-icons-two-tone d-block f-46 text-white">{{ card.icon }}</i>
+      </div>
+    </div>
+  </div>
+</div>

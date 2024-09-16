@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Contact Card">
+      <div class="row mb-4">
+        <div class="col">
+          <div class="form-search">
+            <i class="ti ti-search"></i>
+            <input type="search" class="form-control" placeholder="Search Followers" />
+          </div>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary" (click)="addContact(content)"><i class="ti ti-circle-plus align-text-bottom"></i> Add</button>
+          <ng-template #content let-offcanvas>
+            <ng-scrollbar style="height: calc(100vh - 0px)" visibility="hover">
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasBottomLabel"> Contact Details </h5>
+                <button type="button" class="btn-close text-reset" aria-label="Close" (click)="offcanvas.close('Close click')"></button>
+              </div>
+              <app-card-offcanvas></app-card-offcanvas>
+            </ng-scrollbar>
+          </ng-template>
+        </div>
+      </div>
+      <h4 class="text-primary f-w-600">A</h4>
+      <hr class="my-3" />
+      <app-card-content [list1]="true"></app-card-content>
+      <hr class="my-3" />
+      <h4 class="text-primary f-w-600">K</h4>
+      <hr class="my-3" />
+      <div class="row">
+        <app-card-content [list2]="true"></app-card-content>
+      </div>
+      <hr class="my-3" />
+      <h4 class="text-primary f-w-600">L</h4>
+      <hr class="my-3" />
+      <div class="row">
+        <app-card-content [list3]="true"></app-card-content>
+      </div>
+    </app-card>
+  </div>
+</div>

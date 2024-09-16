@@ -1,0 +1,101 @@
+<div class="auth-main">
+  <div class="auth-wrapper v1">
+    <div class="auth-form">
+      <div class="card mt-5">
+        <div class="card-body">
+          <div class="row">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h2 class="text-secondary"><b>Hi, Welcome Back</b></h2>
+                <h4>Login in to your account</h4>
+              </div>
+              <a href="javascript:">
+                <img src="assets/images/logo.svg" alt="theme-logo" />
+              </a>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="button" class="btn mt-2 btn-light-primary bg-light text-muted">
+              <img src="assets/images/authentication/google-icon.svg" alt="Sign IN With Google" />Sign In With Google
+            </button>
+          </div>
+          <div class="saprator mt-3">
+            <span>or</span>
+          </div>
+          <h5 class="my-4 d-flex justify-content-center"> Sign in with Email address </h5>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                id="email"
+                [(ngModel)]="usernameValue"
+                formControlName="email"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f?.['email'].errors }"
+              />
+              <label for="email">Email address / Username</label>
+              <div *ngIf="submitted && f?.['email'].errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Username is required</div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                type="password"
+                [(ngModel)]="userPassword"
+                id="password"
+                formControlName="password"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f?.['password'].errors }"
+                value="123456"
+              />
+              <label for="Password">Password</label>
+              <i class="ti ti-eye" id="togglePassword"></i>
+              <div *ngIf="submitted && f?.['password'].errors" class="invalid-feedback">
+                <div *ngIf="f.password.errors.required">Password is required</div>
+              </div>
+            </div>
+            <div class="d-flex mt-1 justify-content-between">
+              <div class="form-check">
+                <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+                <label class="form-check-label text-muted" for="customCheckc1">Remember me</label>
+              </div>
+              <h5 class="text-secondary">
+                <a [routerLink]="['/guest/guestV1/guestV1-forgetPassword']">Forgot Password?</a>
+              </h5>
+            </div>
+            <div class="d-grid mt-4">
+              <button class="btn btn-primary"> Login </button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+          </form>
+          <hr />
+          <h5 class="d-flex justify-content-end">
+            <a [routerLink]="['/guest/guestV1/guestV1-register']">Don't have an account?</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="auth-sidecontent">
+      <div class="p-3 px-lg-5 text-center">
+        <div class="animation-content">
+          <img src="assets/images/authentication/authentication-blue-card.svg" alt="images" class="img-fluid blue-card mt-3" />
+          <img src="assets/images/authentication/authentication-purple-card.svg" alt="images" class="img-fluid purple-card mt-3" />
+        </div>
+        <ngb-carousel class="carousel-dark" [showNavigationArrows]="false" [showNavigationIndicators]="true">
+          <ng-template ngbSlide>
+            <h1><b>Components Based Design System</b></h1>
+            <p class="f-12 mt-4">Powerful and easy to use multipurpose theme</p>
+          </ng-template>
+          <ng-template ngbSlide>
+            <h1><b>Components Based Design System</b></h1>
+            <p class="f-12 mt-4">Powerful and easy to use multipurpose theme</p>
+          </ng-template>
+          <ng-template ngbSlide>
+            <h1><b>Components Based Design System</b></h1>
+            <p class="f-12 mt-4">Powerful and easy to use multipurpose theme</p>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+    </div>
+  </div>
+</div>

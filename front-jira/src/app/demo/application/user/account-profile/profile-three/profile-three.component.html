@@ -1,0 +1,191 @@
+<div class="row">
+  <!-- [ sample-page ] start -->
+  <div class="col-sm-12">
+    <app-card cardTitle="Account">
+      <ul ngbNav #nav="ngbNav" aria-busy="true" class="nav-tabs nav profile-tabs mb-3 border-bottom">
+        <li class="nav-item" [ngbNavItem]="1">
+          <a href="javascript:" ngbNavLink class="nav-link">Profile</a>
+          <ng-template ngbNavContent
+            ><div class="row">
+              <div class="col-md-4">
+                <app-card cardTitle="Profile Picture">
+                  <div class="text-center">
+                    <img src="assets/images/user/avatar-5.jpg" alt="user-image" class="img-fluid rounded-circle wid-100" />
+                    <small class="d-block my-3 text-muted">Upload/Change Your Profile Image</small>
+                    <button class="btn btn-primary">Upload Avatar</button>
+                  </div>
+                </app-card>
+              </div>
+              <div class="col-md-8">
+                <app-card cardTitle="Edit Account Details">
+                  <div class="row">
+                    <div class="col-sm-12" *ngFor="let info of information; let i = index">
+                      <div class="form-group">
+                        <label class="form-label" for="information{{ i }}">{{ info.title }}</label>
+                        <input type="text" id="information{{ i }}" class="form-control" value="{{ info.value }}" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6" *ngFor="let list of details; let i = index">
+                      <div class="form-group">
+                        <label class="form-label" for="details{{ i }}">{{ list.title }}</label>
+                        <input type="text" id="details{{ i }}" class="form-control" value="{{ list.value }}" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <button class="btn btn-primary">Change Details</button>
+                    </div>
+                  </div>
+                </app-card>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li class="nav-item" [ngbNavItem]="2">
+          <a href="javascript:" ngbNavLink class="nav-link">Billing</a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-md-6 col-lg-4" *ngFor="let task of billing">
+                <div class="card {{ task.bgColor }} overflow-hidden">
+                  <div class="card-body border-start border-5 {{ task.border }}">
+                    <p class="mb-0 text-muted">{{ task.title }}</p>
+                    <h2>{{ task.subtitle }}</h2>
+                    <a href="javascript:" class="{{ task.color }} f-w-600"
+                      >{{ task.des }} <i class="ti ti-arrow-narrow-right f-20 align-bottom"></i
+                    ></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card border">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-6">
+                    <h5>Payment Methods</h5>
+                  </div>
+                  <div class="col-6 text-end">
+                    <button class="btn btn-primary">Upload Avatar</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item px-0" *ngFor="let task of cardList">
+                    <div class="media align-items-center">
+                      <img class="img-fluid wid-65" src="{{ task.src }}" alt="User image" />
+                      <div class="media-body mx-3">
+                        <h5 class="mb-0">{{ task.company }}</h5>
+                        <small class="text-muted mb-0">{{ task.number }}</small>
+                      </div>
+                      <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                          <a href="javascript:" class="{{ task.design }}">{{ task.type }}</a>
+                        </li>
+                        <li class="list-inline-item opacity-25">|</li>
+                        <li class="list-inline-item">
+                          <a href="javascript:" class="link-primary">Edit</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <app-card cardTitle="Billing History">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Order No.</th>
+                      <th>Date</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let task of tableList">
+                      <td>{{ task.orderNo }}</td>
+                      <td>{{ task.time }}</td>
+                      <td>{{ task.price }}</td>
+                      <td>
+                        <span class="badge {{ task.color }}">{{ task.status }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </app-card>
+          </ng-template>
+        </li>
+        <li class="nav-item" [ngbNavItem]="3">
+          <a href="javascript:" ngbNavLink class="nav-link">Security</a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-md-8">
+                <app-card cardTitle="Change Password">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="form-label">Current password</label>
+                        <input type="password" class="form-control" placeholder="Current password" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6" *ngFor="let password of passwords">
+                      <div class="form-group">
+                        <label class="form-label">{{ password.title }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="{{ password.value }}" />
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <button class="btn btn-primary">Change Password</button>
+                    </div>
+                  </div>
+                </app-card>
+              </div>
+              <div class="col-md-4">
+                <app-card cardTitle="Delete Account">
+                  <p>
+                    To deactivate your account, first delete its resources. If you are the only owner of any teams, either assign another
+                    owner or deactivate the team.
+                  </p>
+                  <button class="btn btn-outline-danger"> Change Password </button>
+                </app-card>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li class="nav-item" [ngbNavItem]="4">
+          <a href="javascript:" ngbNavLink class="nav-link">Notifications</a>
+          <ng-template ngbNavContent>
+            <div class="row">
+              <div class="col-md-8 col-xxl-9">
+                <app-card cardTitle="Subscription Preference Center">
+                  <h5 class="mb-4">I would like to receive:</h5>
+                  <div class="form-check mb-3" *ngFor="let notification of notifications; let i = index">
+                    <input class="form-check-input" type="checkbox" id="ckeckall{{ i }}" checked />
+                    <label class="form-check-label" for="ckeckall{{ i }}"> {{ notification.title }} </label>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="ckeckall4" />
+                    <label class="form-check-label" for="ckeckall4"> Hatch Startup Program </label>
+                  </div>
+                </app-card>
+              </div>
+              <div class="col-md-4 col-xxl-3">
+                <app-card cardTitle="Opt me out instead">
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="ckeckall" checked />
+                    <label class="form-check-label" for="ckeckall"> Unsubscribe me from all of the above </label>
+                  </div>
+                  <button class="btn btn-primary"> Update my preferences </button>
+                </app-card>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      <!-- </div> -->
+      <!-- </div> -->
+    </app-card>
+  </div>
+</div>

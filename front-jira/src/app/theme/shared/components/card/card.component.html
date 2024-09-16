@@ -1,0 +1,11 @@
+<div class="card" [ngClass]="cardClass" #toAnimate>
+  <div class="card-header" *ngIf="!hidHeader" [ngClass]="headerClass">
+    <h5 *ngIf="!customHeader">{{ cardTitle }}</h5>
+    <span *ngIf="!customDate" class="d-block">{{ CardDate }}</span>
+    <ng-content *ngIf="customHeader" select=".app-card-header"></ng-content>
+    <ng-content *ngIf="customDate" select=".app-card-subheader"></ng-content>
+  </div>
+  <div class="card-block" [ngClass]="blockClass">
+    <ng-content></ng-content>
+  </div>
+</div>
