@@ -4,7 +4,6 @@ import ProjectDataDTO from 'App/Models/ProjectDataDTO'
 import SprintDataDTO from 'App/Models/SprintDataDTO'
 import TaskDataDTO from 'App/Models/TaskDataDTO'
 import JiraService from 'App/Services/JiraService'
-import TaskValidator from '../Validators/TaskValidator'
 
 export default class TasksController {
 
@@ -110,6 +109,7 @@ export default class TasksController {
       return{mensagemErro: error.mensagem}
     }
   }
+  
 
   public async sprintDataTasks({ request }: HttpContextContract): Promise<ProjectDataDTO| ErroDTO> {
 

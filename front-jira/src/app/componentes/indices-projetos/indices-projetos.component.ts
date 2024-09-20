@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { TaskDTO } from './TaskDTO';
 import { Observable, lastValueFrom } from 'rxjs';
 import { UserDTO } from './UserDTO';
 import { Router } from '@angular/router';
-
+import html2pdf from 'html2pdf.js';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-indices-projetos',
@@ -16,6 +17,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./indices-projetos.component.scss']
 })
 export default class IndicesProjetosComponent implements OnInit {
+
+  @ViewChild('contentToExport') content: ElementRef | undefined;
+
+  exportToPDF() {
+
+    const element = this.content?.nativeElement;
+
+    const width = element.offsetWidth;  // Largura do elemento
+    const height = element.offsetHeight; // Altura do elemento
+    
+    const options = {
+      margin: 0.5,
+      filename: 'minha_pagina.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: {
+        unit: 'px', // Use pixels se você pegar as dimensões em pixels
+        format: [width, 1240], // Usar as dimensões obtidas
+        orientation: 'landscape',
+        compress: true
+      }
+    };
+
+    html2pdf().from(element).set(options).save();
+  }
 
   url = 'http://localhost:3333';
 
@@ -27,6 +53,10 @@ export default class IndicesProjetosComponent implements OnInit {
   filtroSprint = '';
   filtroTask = '';
   filtroUsuario = '';
+
+  filtroSprintAplicado = '';
+  filtroTaskAplicado = '';
+  filtroUsuarioAplicado = '';
 
   dthInicioSprint : Date | undefined
   dthFimSprint : Date | undefined
@@ -68,6 +98,11 @@ export default class IndicesProjetosComponent implements OnInit {
   perTempoRetrabalhoDev = 0;
   perTempoRetrabalhoQa = 0;
 
+  tempoAndamento = 0;
+  tempoAndamentoRetrabalho = 0;
+  tempoTestes = 0;
+  tempoTestesRetrabalho = 0;
+
   usuariosEnvolvidos:UserDTO[] = []
 
   lstTasks: TaskDTO[] = []
@@ -75,7 +110,7 @@ export default class IndicesProjetosComponent implements OnInit {
   buscaEfetuada = false;
   consultando = false;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -125,13 +160,14 @@ export default class IndicesProjetosComponent implements OnInit {
   consultar() {
 
     this.consultando = true;
-    this.reset();
 
     if(this.filtroSprint == '' && this.filtroTask == '' && this.sprints.length > 0) {
       alert('Necessário informar uma sprint ou uma task para consultar');
       this.consultando = false;
       return;
     }
+
+    this.reset();
 
     if(this.filtroSprint !== '') {
       const sprint:{dt_inicial_sprint:Date, dt_final_sprint:Date} = this.sprints.filter((sprint:{ds_sprint:string, dt_inicial_sprint:Date})=>sprint.ds_sprint === this.filtroSprint)[0]
@@ -170,17 +206,22 @@ export default class IndicesProjetosComponent implements OnInit {
     this.statusAguardandoDeployProducao = response.qtdPorStatus.DEPLOY_PROD??0;
     this.statusConcluidas = this.qtdTotalTarefas - this.statusTodo - this.statusAndamento - this.statusReview
       - this.statusAguardandoDeployHomol - this.statusAguardandoTeste - this.statusTeste - this.statusAguardandoDeployProducao;
-  
+
     this.tempoMedioTotalTarefas = this.divisao(this.tempoTotalTarefas, this.qtdTotalTarefas);
-    this.tempoStatusTodo = this.divisao(this.convertMsToTime(response.tempoPorStatus.TODO??0), this.statusTodo);
-    this.tempoStatusAndamento = this.divisao(this.convertMsToTime(response.tempoPorStatus.ANDAMENTO??0), this.statusAndamento);
-    this.tempoStatusReview = this.divisao(this.convertMsToTime(response.tempoPorStatus.REVIEW??0), this.statusReview);
-    this.tempoStatusAguardandoDeployHomol = this.divisao(this.convertMsToTime(response.tempoPorStatus.DEPLOY_HOMOL??0), this.statusAguardandoDeployHomol);
-    this.tempoStatusAguardandoTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.AGUARDANDO_TESTE??0), this.statusAguardandoTeste);
-    this.tempoStatusTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.TESTE??0), this.statusTeste);
-    this.tempoStatusAguardandoDeployProducao = this.divisao(this.convertMsToTime(response.tempoPorStatus.DEPLOY_PROD??0), this.statusAguardandoDeployProducao);
+    this.tempoStatusTodo = this.divisao(this.convertMsToTime(response.tempoPorStatus.TODO??0), this.qtdTotalTarefas);
+    this.tempoStatusAndamento = this.divisao(this.convertMsToTime(response.tempoPorStatus.ANDAMENTO??0), this.qtdTotalTarefas);
+    this.tempoStatusReview = this.divisao(this.convertMsToTime(response.tempoPorStatus.REVIEW??0), this.qtdTotalTarefas);
+    this.tempoStatusAguardandoDeployHomol = this.divisao(this.convertMsToTime(response.tempoPorStatus.DEPLOY_HOMOL??0), this.qtdTotalTarefas);
+    this.tempoStatusAguardandoTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.AGUARDANDO_TESTE??0), this.qtdTotalTarefas);
+    this.tempoStatusTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.TESTE??0), this.qtdTotalTarefas);
+    this.tempoStatusAguardandoDeployProducao = this.divisao(this.convertMsToTime(response.tempoPorStatus.DEPLOY_PROD??0), this.qtdTotalTarefas);
     this.tempoStatusConcluidas = this.tempoMedioTotalTarefas - this.tempoStatusTodo - this.tempoStatusAndamento - this.tempoStatusReview
       - this.tempoStatusAguardandoDeployHomol - this.tempoStatusAguardandoTeste - this.tempoStatusTeste - this.tempoStatusAguardandoDeployProducao;
+
+    this.tempoAndamento = response.tempoPorStatus.ANDAMENTO;
+    this.tempoAndamentoRetrabalho = response.tempoRetrabalhoPorStatus.ANDAMENTO;
+    this.tempoTestes = response.tempoPorStatus.TESTE;
+    this.tempoTestesRetrabalho = response.tempoRetrabalhoPorStatus.TESTE;
 
     this.usuariosEnvolvidos = []
     for(const user of response.usuarios) {
@@ -197,6 +238,17 @@ export default class IndicesProjetosComponent implements OnInit {
       taskDto.id = task.task
       taskDto.descricao = task.data.descricao
       taskDto.status = task.data.statusAtual
+
+      if(task.data.tempoRetrabalhoPorStatus.ANDAMENTO) {
+        taskDto.perRetrabalhoDev = (task.data.tempoRetrabalhoPorStatus.ANDAMENTO * 100) / (task.data.tempoPorStatus.ANDAMENTO)
+      } else {
+        taskDto.perRetrabalhoDev = 0;
+      }
+      if(task.data.tempoRetrabalhoPorStatus.TESTE) {
+        taskDto.perRetrabalhoQa = (task.data.tempoRetrabalhoPorStatus.TESTE * 100) / (task.data.tempoPorStatus.TESTE)
+      } else {
+        taskDto.perRetrabalhoQa = 0;
+      }
 
       const response = await lastValueFrom(this.http.get<any>(
         `${this.url}/tasks/taskTime?task=${task.task}${this.dthInicioSprint?'&dthInicio='+this.dthInicioSprint:''}${this.dthFimSprint?'&dthFim='+this.dthFimSprint:''}`, config));
@@ -297,11 +349,27 @@ export default class IndicesProjetosComponent implements OnInit {
     this.perTempoRetrabalhoDev = 0;
     this.perTempoRetrabalhoQa = 0;
 
+    this.tempoAndamento = 0;
+    this.tempoAndamentoRetrabalho = 0;
+    this.tempoTestes = 0;
+    this.tempoTestesRetrabalho = 0;
+
     this.dthInicioSprint = undefined
     this.dthFimSprint = undefined
 
     this.usuariosEnvolvidos = []
 
     this.lstTasks = []
+
+    this.buscaEfetuada = false;
+
+    this.filtroSprintAplicado = this.filtroSprint;
+    this.filtroTaskAplicado = this.filtroTask;
+    this.filtroUsuarioAplicado = this.filtroUsuario;
+  }
+  // private Method
+  open(content: ElementRef) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title',  size: 'lg', centered: true  }).result.then(
+    );
   }
 }

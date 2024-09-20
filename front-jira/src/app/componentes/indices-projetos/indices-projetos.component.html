@@ -17,8 +17,8 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <label for="filter_task" class="form-label">Task</label>
-              <input type="text" class="form-control" id="filter_task" name="filter_task" aria-describedby="Task" placeholder="Task" [(ngModel)]="filtroTask" (change)="carregarUsuarios()"/>
+              <label for="filter_task" class="form-label">Tarefa</label>
+              <input type="text" class="form-control" id="filter_task" name="filter_task" aria-describedby="Tarefa" placeholder="Tarefa" [(ngModel)]="filtroTask" (change)="carregarUsuarios()"/>
             </div>
           </div>
           <div class="col-md-4">
@@ -34,7 +34,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="pnl-search">
-              <button class="btn btn-primary" (click)="consultar()">Consultar</button>
+              <button *ngIf="buscaEfetuada && !consultando" class="btn btn-primary" (click)="exportToPDF()">PDF</button>
+              <button class="btn btn-primary" style="margin-left: 5px !important;" (click)="consultar()">Consultar</button>
             </div>
           </div>
         </div>
@@ -47,44 +48,102 @@
 <div class="row">
   <div class="col-md-12">
     <div *ngIf="consultando" style="width:100%; height:100%; text-align: center; vertical-align: middle;">
-      <div class="spinner-grow text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div> 
-      <h1>Consultando, aguarde...</h1>
+        <div class="spinner-grow text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div> 
+        <h1>Consultando, aguarde...</h1>
+        <h5>Dependendo da quantidade de tarefas buscadas, esse processo pode demorar alguns minutos.</h5>
     </div>
   </div>
 </div>
 
-<div class="row" *ngIf="buscaEfetuada && !consultando">
+<div class="row" *ngIf="buscaEfetuada && !consultando" #contentToExport>
+  <div class="col-md-12">
+    <div class="card"><div class="card-body">
+      <h5 *ngIf="filtroSprintAplicado"><b>Sprint: </b> <label *ngIf="filtroSprintAplicado">{{filtroSprintAplicado}}: de {{dthInicioSprint | date : 'dd/MM/yyyy'}} até {{dthFimSprint | date : 'dd/MM/yyyy'}}</label><br/></h5><h5 *ngIf="filtroTaskAplicado"><b>Tarefa: </b> {{filtroTaskAplicado}}<br/></h5><h5 *ngIf="filtroUsuarioAplicado"><b>Pessoa: </b> {{filtroUsuarioAplicado}}</h5>
+    </div></div>
+  </div>
   <div class="col-md-3">
-    <div class="card bg-primary order-card">
+    <ng-template #leg1 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Quantidade de tarefas encontradas para os filtros preenchidos.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div class="card bg-primary order-card" title="Quantidade de tarefas encontradas para os filtros preenchidos" (click)="open(leg1)">
       <div class="card-body">
-        <h5 class="text-white">Tasks</h5>
+        <h5 class="text-white">Tarefas</h5>
         <h3 class="text-white">{{qtdTotalTarefas}}</h3>
         <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg></i>
       </div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card bg-success order-card">
+    <ng-template #leg2 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Quantidade de tasks com status 'Concluída' encontradas para os filtros preenchidos.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div class="card bg-success order-card" title="Quantidade de tasks com status 'Concluída' encontradas para os filtros preenchidos" (click)="open(leg2)">
       <div class="card-body">
-        <h5 class="text-white">Tasks concluídas</h5>
+        <h5 class="text-white">Tarefas concluídas</h5>
         <h3 class="text-white">{{statusConcluidas}}</h3>
         <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg></i>
       </div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card bg-secondary order-card">
+    <ng-template #leg3 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Percentual da soma dos tempos que as tarefas ficaram em andamento após serem reprovadas (review ou testes) sobre a soma do tempo total que as tarefas ficaram em andamento.</p>
+        <p>percentual = (soma(tempoTarefasAndamentoAposReprovadas) * 100) / soma(tempoTarefasAndamento)</p>
+        <p>{{(tempoAndamentoRetrabalho*100)/tempoAndamento}} = ({{tempoAndamentoRetrabalho}}ms * 100) / {{tempoAndamento}}ms</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div class="card bg-secondary order-card" title="Percentual da soma dos tempos que as tarefas ficaram em andamento após serem reprovadas (review ou testes) sobre a soma do tempo total que as tarefas ficaram em andamento" (click)="open(leg3)">
       <div class="card-body">
-        <h5 class="text-white">Retrabalho de DEV</h5>
+        <h5 class="text-white" >Retrabalho de DEV</h5>
         <h3 class="text-white">{{perTempoRetrabalhoDev.toFixed(2).replaceAll('.',',')}}%</h3>
         <i class="material-icons-two-tone d-block f-46 card-icon text-white"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-code"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 8l-4 4l4 4" /><path d="M17 8l4 4l-4 4" /><path d="M14 4l-4 16" /></svg></i>
       </div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card bg-danger order-card">
+    <ng-template #leg4 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Percentual da soma dos tempos que as tarefas ficaram em testes após serem reprovadas pelos testes sobre a soma tempo total que as tarefas ficaram em testes.</p>
+        <p>percentual = (soma(tempoTarefasTesteAposReprovadas) * 100) / soma(tempoTarefasTeste)</p>
+        <p>{{(tempoTestesRetrabalho*100)/tempoTestes}} = ({{tempoTestesRetrabalho}}ms * 100) / {{tempoTestes}}ms</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div class="card bg-danger order-card" title="Percentual da soma dos tempos que as tarefas ficaram em testes após serem reprovadas pelos testes sobre a soma tempo total que as tarefas ficaram em testes" (click)="open(leg4)">
       <div class="card-body">
         <h5 class="text-white">Retrabalho de QA</h5>
         <h3 class="text-white">{{perTempoRetrabalhoQa.toFixed(2).replaceAll('.',',')}}%</h3>
@@ -97,11 +156,25 @@
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-6">
-            <div class="card">
+            <ng-template #leg5 let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+              </div>
+              <div class="modal-body">
+                <p>Quantidade de tarefas que não são do tipo BUG = Percentual de tarefas que não são do tipo BUG sobre o total de tarefas filtradas</p>
+                <p>percentual = (quantidadeTarefasNaoBug * 100) / quantidadeTarefas</p>
+                <p>{{(qtdTarefasMelhoria*100)/qtdTotalTarefas}} = ({{qtdTarefasMelhoria}} * 100) / {{qtdTotalTarefas}}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+              </div>
+            </ng-template>
+            <div class="card" (click)="open(leg5)">
               <div class="card-body">
                 <h5>Tarefas de melhoria
-                  <span class="float-end">{{ qtdTarefasMelhoria }} = {{ percentualTarefasAnalisadas(qtdTarefasMelhoria,
-                    qtdTotalTarefas) }}%</span>
+                  <span class="float-end"><label title="Quantidade de tarefas que não são do tipo BUG">{{ qtdTarefasMelhoria }}</label> = <label title="Percentual de tarefas que não são do tipo BUG sobre o total de tarefas filtradas">{{ percentualTarefasAnalisadas(qtdTarefasMelhoria,
+                    qtdTotalTarefas) }}%</label></span>
                 </h5>
                 <div class="progress">
                   <div class="progress-bar bg-primary bg-primary"
@@ -111,11 +184,25 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card">
+            <ng-template #leg6 let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+              </div>
+              <div class="modal-body">
+                <p>Quantidade de tarefas que são do tipo BUG = Percentual de tarefas que são do tipo BUG sobre o total de tarefas filtradas</p>
+                <p>percentual = (quantidadeTarefasBug * 100) / quantidadeTarefas</p>
+                <p>{{(qtdTarefasBugs*100)/qtdTotalTarefas}} = ({{qtdTarefasBugs}} * 100) / {{qtdTotalTarefas}}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+              </div>
+            </ng-template>
+            <div class="card" (click)="open(leg6)">
               <div class="card-body">
                 <h5>Tarefas de correções de erros
-                  <span class="float-end">{{ qtdTarefasBugs }} = {{ percentualTarefasAnalisadas(qtdTarefasBugs,
-                    qtdTotalTarefas) }}%</span>
+                  <span class="float-end"><label title="Quantidade de tarefas que são do tipo BUG">{{ qtdTarefasBugs }}</label> = <label title="Percentual de tarefas que são do tipo BUG sobre o total de tarefas filtradas">{{ percentualTarefasAnalisadas(qtdTarefasBugs,
+                    qtdTotalTarefas) }}%</label></span>
                 </h5>
                 <div class="progress">
                   <div class="progress-bar bg-danger bg-danger"
@@ -125,11 +212,37 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card">
+            <ng-template #leg7 let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+              </div>
+              <div class="modal-body">
+                <p>Quantidade de tarefas que retornaram para andamento após terem avançado para revisão = {{ qtdTarefasRetornos }}</p>
+                <p>Percentual da quantidade de tarefas que retornaram para andamento após terem avançado para revisão sobre o total de tarefas filtradas:<br />
+                percentual = (qtdTarefasRetornadas * 100) / qtdTotalTarefas<br />
+                {{(qtdTarefasRetornos*100)/qtdTotalTarefas}} = ({{qtdTarefasRetornos}} * 100) / {{qtdTotalTarefas}}<br />
+                </p>
+                <p>Quantidade de tarefas que não são de BUG e que retornaram para andamento após terem avançado para revisão = {{ qtdTarefasMelhoriaRetornos }}</p>
+                <p>Quantidade de tarefas que são de BUG e que retornaram para andamento após terem avançado para revisão = {{ qtdTarefasBugsRetornos }}</p>
+                <p>Percentual da quantidade de tarefas que não são de BUG e que retornaram para andamento após terem avançado para revisão sobre a quantidade de tarefas com retrabalho:<br/>
+                percentual = (quantidadeTarefasMelhoriasRetornadas * 100) / quantidadeTarefasRetornadas<br />
+                {{(qtdTarefasMelhoriaRetornos * 100) / qtdTarefasRetornos}} = ({{qtdTarefasMelhoriaRetornos}} * 100) / {{qtdTarefasRetornos}}
+                </p>
+                <p>Percentual da quantidade de tarefas que são de BUG e que retornaram para andamento após terem avançado para revisão sobre a quantidade de tarefas com retrabalho:<br/>
+                  percentual = (quantidadeTarefasBugsRetornadas * 100) / quantidadeTarefasRetornadas<br />
+                  {{(qtdTarefasBugsRetornos * 100) / qtdTarefasRetornos}} = ({{qtdTarefasBugsRetornos}} * 100) / {{qtdTarefasRetornos}}
+                  </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+              </div>
+            </ng-template>
+            <div class="card" (click)="open(leg7)">
               <div class="card-body">
                 <h5>Tarefas com retrabalho
-                  <span class="float-end">{{ qtdTarefasRetornos }} = {{ percentualTarefasAnalisadas(qtdTarefasRetornos,
-                    qtdTotalTarefas) }}%</span>
+                  <span class="float-end"><label title="Quantidade de tarefas que retornaram para andamento após terem avançado para revisão">{{ qtdTarefasRetornos }}</label><label title="Percentual da quantidade de tarefas que retornaram para andamento após terem avançado para revisão sobre o total de tarefas filtradas"> = {{ percentualTarefasAnalisadas(qtdTarefasRetornos,
+                    qtdTotalTarefas) }}%</label></span>
                 </h5>
                 <div class="progress">
                   <div class="progress-bar bg-danger bg-danger"
@@ -139,20 +252,32 @@
                 <div class="row">
                   <div class="col-md-6 text-center">
                     <p class="text-muted m-b-5 f-14">Tarefas de melhorias com retrabalho</p>
-                    <h6 class="f-w-900">{{ qtdTarefasMelhoriaRetornos }} =
-                      {{ percentualTarefasAnalisadas(qtdTarefasMelhoriaRetornos, qtdTarefasRetornos) }}%</h6>
+                    <h6 class="f-w-900"><label title="Quantidade de tarefas que não são de BUG e que retornaram para andamento após terem avançado para revisão">{{ qtdTarefasMelhoriaRetornos }}</label><label title="Percentual da quantidade de tarefas que não são de BUG e que retornaram para andamento após terem avançado para revisão sobre a quantidade de tarefas com retrabalho"> =
+                      {{ percentualTarefasAnalisadas(qtdTarefasMelhoriaRetornos, qtdTarefasRetornos) }}%</label></h6>
                   </div>
                   <div class="col-md-6 text-center">
                     <p class="text-muted m-b-5 f-14">Tarefas de bugs com retrabalho</p>
-                    <h6 class="f-w-900">{{ qtdTarefasBugsRetornos }} = {{
-                      percentualTarefasAnalisadas(qtdTarefasBugsRetornos, qtdTarefasRetornos) }}%</h6>
+                    <h6 class="f-w-900"><label title="Quantidade de tarefas que são de BUG e que retornaram para andamento após terem avançado para revisão">{{ qtdTarefasBugsRetornos }}</label><label title="Percentual da quantidade de tarefas que são de BUG e que retornaram para andamento após terem avançado para revisão sobre a quantidade de tarefas com retrabalho"> = {{
+                      percentualTarefasAnalisadas(qtdTarefasBugsRetornos, qtdTarefasRetornos) }}%</label></h6>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="card" style="height: 85%;">
+            <ng-template #leg8 let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+              </div>
+              <div class="modal-body">
+                <p>Quantidade de vezes que tarefas retornaram para andamento após terem avançado para revisão (não é a quantidade de tarefas, mas a quantidade de retornos).</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+              </div>
+            </ng-template>
+            <div (click)="open(leg8)" class="card" style="height: 85%;" title="Quantidade de vezes que tarefas retornaram para andamento após terem avançado para revisão (não é a quantidade de tarefas, mas a quantidade de retornos)">
               <div class="card-body">
                 <br />
                 <div class="row align-items-center">
@@ -172,7 +297,19 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card">
+    <ng-template #leg9 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Usuários que foram responsáveis pelas tarefas em algum momento e horas lançadas dentro da sprint filtrada.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div (click)="open(leg9)" class="card" title="Usuários que foram responsáveis pelas tarefas em algum momento e horas lançadas dentro da sprint filtrada">
       <div class="card-header">
         <h5>Usuários envolvidos e horas lançadas</h5>
       </div>
@@ -184,7 +321,7 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card trafic-card">
+    <div class="card trafic-card" title="Quantidade de tarefas por status e respectivo percentual sobre o total de tarefas filtradas">
       <div class="card-header">
         <h5>Tarefas por status <span class="float-end">{{ qtdTotalTarefas }}</span></h5>
       </div>
@@ -241,7 +378,7 @@
             }}%</span>
         </p>
         <div class="progress yellow">
-          <div class="progress-bar bg-info"
+          <div class="progress-bar bg-warning"
             [style]="'width: ' + percentualTarefasAnalisadas(statusTeste, qtdTotalTarefas) + '%'"></div>
         </div>
         <p class="m-b-10 m-t-30">
@@ -268,7 +405,7 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card trafic-card">
+    <div class="card trafic-card" title="Quantidade média (soma dos tempos dividida pela quantidade de tasks) de dias de permanência das tarefas por status (tempo em dias, não o tempo lançado)">
       <div class="card-header">
         <h5>Tempo médio de permanência por status</h5>
       </div>
@@ -341,7 +478,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <h5>Tasks</h5>
+        <h5>Tarefas</h5>
       </div>
       <div class="card-body table-border-style">
         <div class="table-responsive">
@@ -351,33 +488,38 @@
                 <th>ID</th>
                 <th>Descrição</th>
                 <th>Status</th>
-                <th>Tempos</th>
-                <th>Quantidade de retornos</th>
+                <th title="Tempos lançados e de permanência nos status">Tempos</th>
+                <th title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão">Quantidade de retornos</th>
+                <th title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento">Retrabalho DEV</th>
+                <th title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes">Retrabalho QA</th>
                 <th>Usuários envolvidos</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let task of lstTasks">
-                <td>{{task.id}}</td>
+                <td><a href="https://simlabs.atlassian.net/browse/{{task.id}}" class="m-b-10 link" target="_blank">{{task.id}}</a></td>
                 <td>{{task.descricao}}</td>
                 <td>
                   <span *ngIf="task.status === 'TAREFAS PENDENTES'" class="badge rounded-pill bg-primary">Pendente</span>
-                  <span *ngIf="task.status === 'EM ANDAMENTO'"class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+                  <span *ngIf="task.status === 'EM ANDAMENTO' || task.status === 'EM PROGRESSO'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
                   <span *ngIf="task.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
-                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO || task.status === 'AGUARDANDO DEPLOY''" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
                   <span *ngIf="task.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
                   <span *ngIf="task.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
                   <span *ngIf="task.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
                   <span *ngIf="task.status === 'CONCLUÍDO'" class="badge rounded-pill bg-success">Concluída</span>
+                  <span *ngIf="task.status !== 'EM PROGRESSO' && task.status !== 'AGUARDANDO DEPLOY' && task.status !== 'EM ANDAMENTO' && task.status !== 'CODE REVIEW' && task.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && task.status !== 'AGUARDANDO TESTE' && task.status !== 'EM TESTE' && task.status !== 'TAREFAS PENDENTES' && task.status !== 'CONCLUÍDO' && task.status !== 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-primary">{{task.status}}</span>
                 </td>
                 <td>
-                  <p>{{task.tempoLancadoSprint}} horas lançadas na sprint</p>
-                  <p>{{task.tempoLancadoTotal}} horas totais lançadas</p>
-                  <p>{{task.tempoEmStatusGasto}} dias desde o início</p>
-                  <p>{{task.tempoEmRetrabalhoStatus}} dias em retrabalho desde o início</p>
+                  <p title="Horas lançadas pelos usuários na tarefa dentro da sprint filtrada">{{task.tempoLancadoSprint}} horas lançadas na sprint</p>
+                  <p title="Horas lançadas pelos usuários na tarefa (horas totais independentes da sprint filtrada)">{{task.tempoLancadoTotal}} horas totais lançadas</p>
+                  <p title="Quantidade de dias desde a criação da tarefa até o dia atual ou a sua conclusão">{{task.tempoEmStatusGasto}} dias desde o início</p>
+                  <p title="Quantidade de dias desde o primeiro retorno para desenvolvimento até o dia atual ou a sua conclusão">{{task.tempoEmRetrabalhoStatus}} dias em retrabalho desde o início</p>
                 </td>
-                <td>{{task.quantidadeRetornos}}</td>
-                <td><p *ngFor="let user of task.usuariosEnvolvidos">
+                <td title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão">{{task.quantidadeRetornos}}</td>
+                <td title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento">{{task.perRetrabalhoDev.toFixed(2).replaceAll('.',',')}}%</td>
+                <td title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes">{{task.perRetrabalhoQa.toFixed(2).replaceAll('.',',')}}%</td>
+                <td title="Usuários que foram responsáveis pela tarefa em algum momento e horas lançadas dentro da sprint filtrada"><p *ngFor="let user of task.usuariosEnvolvidos">
                   {{user.name}}: {{user.time}} horas
                 </p></td>
               </tr>
@@ -388,3 +530,4 @@
     </div>
   </div>
 </div>
+

@@ -128,7 +128,11 @@ export default class JiraService {
     const descricao =  response.data.fields.summary
     const tipo = response.data.fields.issuetype.name;
     const criacao = response.data.fields.created;
-    const status = response.data.fields.status.name?.toString().toUpperCase();
+    let status = response.data.fields.status.name?.toString().toUpperCase();
+
+    if('BACKLOG' === status.toUpperCase()) {
+      status = 'TAREFAS PENDENTES';
+    }
 
     return {descricao: descricao, tipo: tipo, criacao: criacao, statusAtual: status}
 
@@ -177,6 +181,7 @@ export default class JiraService {
         //if(dataInicioFiltro == null || dataFimFiltro == null || (dataInicioFiltro <= new Date(element.created.toString()) && dataFimFiltro >= new Date(element.created.toString()))) {
 
           if (item.toString != null && item.fieldId == 'assignee') {
+           
             if (
               listUsuariosEnvolvidos.indexOf(item.toString.toString()) < 0 &&
               item.toString &&
@@ -185,8 +190,18 @@ export default class JiraService {
               listUsuariosEnvolvidos.push(item.toString.toString())
             }
           } else if (item.fieldId == 'status') {
-            if (!dataInicio) {
-              //dataInicio = new Date(element.created.toString())
+
+            if('BACKLOG' === item.toString.toUpperCase()) {
+              item.toString = 'To Do';
+            }
+            if('EM PROGRESSO' === item.toString.toUpperCase()) {
+              item.toString = 'In Progress';
+            }
+            if('AGUARDANDO DEPLOY' === item.toString.toUpperCase()){
+              item.toString = 'Aguardando Deploy Homologação';
+            }
+            if('CONCLUÍDO' === item.toString.toUpperCase()){
+              item.toString = 'Done';
             }
 
             if (item.toString.toUpperCase() == 'IN PROGRESS') {
@@ -354,6 +369,10 @@ export default class JiraService {
 
     for(const task of tasksList) {
       var data: TaskDataDTO = await new JiraService().getTaskData(task, dataInicioFiltro, dataFimFiltro)
+
+      if(user && !data.usuariosEnvolvidos.includes(user.toString())) {
+        continue;
+      }
 
       var userPartTask = false;
       for (var userTask of data.usuariosEnvolvidos) {
@@ -634,10 +653,14 @@ export default class JiraService {
     
     for(const task of tasksList) {
       var data: TaskDataDTO = await new JiraService().getTaskData(task, null, null)
-      
+
+      if(user && !data.usuariosEnvolvidos.includes(user.toString())) {
+        continue;
+      }
+     
       if(data.statusAtual === 'TAREFAS PENDENTES')
         qtdPorStatus.TODO = qtdPorStatus.TODO+1
-      if(data.statusAtual === 'EM ANDAMENTO')
+      if(data.statusAtual === 'EM ANDAMENTO'  || data.statusAtual === 'EM PROGRESSO')
         qtdPorStatus.ANDAMENTO = qtdPorStatus.ANDAMENTO+1
       if(data.statusAtual === 'CODE REVIEW')
         qtdPorStatus.REVIEW = qtdPorStatus.REVIEW+1
@@ -647,7 +670,7 @@ export default class JiraService {
         qtdPorStatus.AGUARDANDO_TESTE = qtdPorStatus.AGUARDANDO_TESTE+1
       if(data.statusAtual === 'EM TESTE')
         qtdPorStatus.TESTE = qtdPorStatus.TESTE+1
-      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO')
+      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO'  || data.statusAtual === 'AGUARDANDO DEPLOY')
         qtdPorStatus.DEPLOY_PROD = qtdPorStatus.DEPLOY_PROD+1
       if(data.statusAtual === 'CONCLUÍDO')
         qtdPorStatus.DONE = qtdPorStatus.DONE+1
@@ -672,8 +695,6 @@ export default class JiraService {
       if(user === null || user === '') {
         userPartTask = true;
       }
-
-      console.log(user)
 
       if(userPartTask) {
         tasks.push({task: task, data: data});
@@ -733,7 +754,6 @@ export default class JiraService {
       AGUARDANDO_TESTE:tempoPorStatusAGUARDANDO_TESTE,
       TESTE:tempoPorStatusTESTE,
       DEPLOY_PROD:tempoPorStatusDEPLOY_PROD}
-
     tempoPorStatusString= {TODO:new JiraService().convertMsToTime(tempoPorStatus.TODO),
       ANDAMENTO:new JiraService().convertMsToTime(tempoPorStatus.ANDAMENTO),
       REVIEW:new JiraService().convertMsToTime(tempoPorStatus.REVIEW),
@@ -811,7 +831,7 @@ export default class JiraService {
 
       if(data.statusAtual === 'TAREFAS PENDENTES')
         qtdPorStatus.TODO = qtdPorStatus.TODO+1
-      if(data.statusAtual === 'EM ANDAMENTO')
+      if(data.statusAtual === 'EM ANDAMENTO' || data.statusAtual === 'EM PROGRESSO')
         qtdPorStatus.ANDAMENTO = qtdPorStatus.ANDAMENTO+1
       if(data.statusAtual === 'CODE REVIEW')
         qtdPorStatus.REVIEW = qtdPorStatus.REVIEW+1
@@ -821,7 +841,7 @@ export default class JiraService {
         qtdPorStatus.AGUARDANDO_TESTE = qtdPorStatus.AGUARDANDO_TESTE+1
       if(data.statusAtual === 'EM TESTE')
         qtdPorStatus.TESTE = qtdPorStatus.TESTE+1
-      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO')
+      if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO' || data.statusAtual === 'AGUARDANDO DEPLOY')
         qtdPorStatus.DEPLOY_PROD = qtdPorStatus.DEPLOY_PROD+1
       if(data.statusAtual === 'CONCLUÍDO')
         qtdPorStatus.DONE = qtdPorStatus.DONE+1

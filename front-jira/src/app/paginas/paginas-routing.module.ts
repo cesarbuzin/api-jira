@@ -27,6 +27,10 @@ const routes: Routes = [
   {
     path: 'SRE',
     component: IndicesProjetosComponent
+  },
+  {
+    path: 'RPA',
+    component: IndicesProjetosComponent
   }
 ];
 

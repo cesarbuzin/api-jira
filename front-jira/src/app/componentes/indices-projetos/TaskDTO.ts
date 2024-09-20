@@ -11,4 +11,6 @@ export class TaskDTO {
     tempoLancadoTotal:number|undefined
     quantidadeRetornos:number|undefined
     usuariosEnvolvidos:UserDTO[] = []
+    perRetrabalhoDev:number|undefined
+    perRetrabalhoQa:number|undefined
 }

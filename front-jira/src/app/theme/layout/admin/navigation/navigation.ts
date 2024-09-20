@@ -72,5 +72,14 @@ export const NavigationItems: NavigationItem[] = [
     classes: 'nav-item',
     icon: 'feather icon-monitor',
     breadcrumbs: false
+  },
+  {
+    id: 'rpa',
+    title: 'RPA',
+    type: 'item',
+    url: '/paginas/RPA',
+    classes: 'nav-item',
+    icon: 'feather icon-monitor',
+    breadcrumbs: false
   }
 ];
