@@ -255,6 +255,11 @@ export default class IndicesProjetosComponent implements OnInit {
       taskDto.descricao = task.data.descricao
       taskDto.status = task.data.statusAtual
 
+      taskDto.tempoAndamento=task.data.tempoPorStatus.ANDAMENTO??0
+      taskDto.tempoAndamentoRetrabalho=task.data.tempoRetrabalhoPorStatus.ANDAMENTO??0
+      taskDto.tempoTeste=task.data.tempoPorStatus.TESTE??0
+      taskDto.tempoTesteRetrabalho=task.data.tempoRetrabalhoPorStatus.TESTE??0
+
       if(task.data.tempoRetrabalhoPorStatus.ANDAMENTO) {
         taskDto.perRetrabalhoDev = (task.data.tempoRetrabalhoPorStatus.ANDAMENTO * 100) / (task.data.tempoPorStatus.ANDAMENTO)
       } else {

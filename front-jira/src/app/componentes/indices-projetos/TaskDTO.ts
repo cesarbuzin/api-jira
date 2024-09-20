@@ -13,4 +13,8 @@ export class TaskDTO {
     usuariosEnvolvidos:UserDTO[] = []
     perRetrabalhoDev:number|undefined
     perRetrabalhoQa:number|undefined
+    tempoAndamento:number|undefined
+    tempoAndamentoRetrabalho:number|undefined
+    tempoTeste:number|undefined
+    tempoTesteRetrabalho:number|undefined
 }

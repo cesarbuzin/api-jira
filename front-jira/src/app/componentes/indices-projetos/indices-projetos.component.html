@@ -521,21 +521,123 @@
       </div>
       <div class="card-body table-border-style">
         <div class="table-responsive">
+
+          <ng-template #leg12 let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+              <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>Horas lançadas pelos usuários na tarefa dentro da sprint filtrada.</p>
+              <p>Horas lançadas pelos usuários na tarefa (horas totais independentes da sprint filtrada).</p>
+              <p>Quantidade de dias desde a criação da tarefa até o dia atual ou a sua conclusão.</p>
+              <p>Quantidade de dias desde o primeiro retorno para desenvolvimento até o dia atual ou a sua conclusão.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+            </div>
+          </ng-template>
+
+          <ng-template #leg13 let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+              <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+            </div>
+          </ng-template>
+
+          <ng-template #leg14 let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+              <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento.</p>
+              <p>Percentual = (tempoAndamentoAposRetorno * 100) / tempoAndamento</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+            </div>
+          </ng-template>
+
+          <ng-template #leg15 let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+              <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes.</p>
+              <p>Percentual = (tempoTestesAposRetorno * 100) / tempoTestes</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+            </div>
+          </ng-template>
+
+          <ng-template #leg16 let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+              <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>Usuários que foram responsáveis pela tarefa em algum momento e horas lançadas dentro da sprint filtrada.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+            </div>
+          </ng-template>
+
           <table class="table" >
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Descrição</th>
                 <th>Status</th>
-                <th title="Tempos lançados e de permanência nos status">Tempos</th>
-                <th title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão">Quantidade de retornos</th>
-                <th title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento">Retrabalho DEV</th>
-                <th title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes">Retrabalho QA</th>
-                <th>Usuários envolvidos</th>
+                <th title="Tempos lançados e de permanência nos status" (click)="open(leg12)">Tempos</th>
+                <th title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão" (click)="open(leg13)">Quantidade de retornos</th>
+                <th title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento" (click)="open(leg14)">Retrabalho DEV</th>
+                <th title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes" (click)="open(leg15)">Retrabalho QA</th>
+                <th (click)="open(leg16)">Usuários envolvidos</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let task of lstTasks">
+
+                <ng-template #leg17 let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                    <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento.</p>
+                    <p>Percentual = (tempoAndamentoAposRetorno * 100) / tempoAndamento</p>
+                    <p>{{task.tempoAndamento>0?((task.tempoAndamentoRetrabalho * 100)/task.tempoAndamento):0}} = ({{task.tempoAndamentoRetrabalho}} * 100) / {{task.tempoAndamento}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+                  </div>
+                </ng-template>
+      
+                <ng-template #leg18 let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+                    <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes.</p>
+                    <p>Percentual = (tempoTestesAposRetorno * 100) / tempoTestes</p>
+                    <p>{{task.tempoTeste>0?((task.tempoTesteRetrabalho * 100)/task.tempoTeste):0}} = ({{task.tempoTesteRetrabalho}} * 100) / {{task.tempoTeste}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+                  </div>
+                </ng-template>
+                
                 <td><a href="https://simlabs.atlassian.net/browse/{{task.id}}" class="m-b-10 link" target="_blank">{{task.id}}</a></td>
                 <td>{{task.descricao}}</td>
                 <td>
@@ -549,16 +651,16 @@
                   <span *ngIf="task.status === 'CONCLUÍDO'" class="badge rounded-pill bg-success">Concluída</span>
                   <span *ngIf="task.status !== 'EM PROGRESSO' && task.status !== 'AGUARDANDO DEPLOY' && task.status !== 'EM ANDAMENTO' && task.status !== 'CODE REVIEW' && task.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && task.status !== 'AGUARDANDO TESTE' && task.status !== 'EM TESTE' && task.status !== 'TAREFAS PENDENTES' && task.status !== 'CONCLUÍDO' && task.status !== 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-primary">{{task.status}}</span>
                 </td>
-                <td>
+                <td (click)="open(leg12)">
                   <p title="Horas lançadas pelos usuários na tarefa dentro da sprint filtrada">{{task.tempoLancadoSprint}} horas lançadas na sprint</p>
                   <p title="Horas lançadas pelos usuários na tarefa (horas totais independentes da sprint filtrada)">{{task.tempoLancadoTotal}} horas totais lançadas</p>
                   <p title="Quantidade de dias desde a criação da tarefa até o dia atual ou a sua conclusão">{{task.tempoEmStatusGasto}} dias desde o início</p>
                   <p title="Quantidade de dias desde o primeiro retorno para desenvolvimento até o dia atual ou a sua conclusão">{{task.tempoEmRetrabalhoStatus}} dias em retrabalho desde o início</p>
                 </td>
-                <td title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão">{{task.quantidadeRetornos}}</td>
-                <td title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento">{{task.perRetrabalhoDev.toFixed(2).replaceAll('.',',')}}%</td>
-                <td title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes">{{task.perRetrabalhoQa.toFixed(2).replaceAll('.',',')}}%</td>
-                <td title="Usuários que foram responsáveis pela tarefa em algum momento e horas lançadas dentro da sprint filtrada"><p *ngFor="let user of task.usuariosEnvolvidos">
+                <td (click)="open(leg13)" title="Quantidade de vezes que a tarefa retornou para andamento após ter avançado para revisão">{{task.quantidadeRetornos}}</td>
+                <td (click)="open(leg17)" title="Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento">{{task.perRetrabalhoDev.toFixed(2).replaceAll('.',',')}}%</td>
+                <td (click)="open(leg18)" title="Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes">{{task.perRetrabalhoQa.toFixed(2).replaceAll('.',',')}}%</td>
+                <td (click)="open(leg16)" title="Usuários que foram responsáveis pela tarefa em algum momento e horas lançadas dentro da sprint filtrada"><p *ngFor="let user of task.usuariosEnvolvidos">
                   {{user.name}}: {{user.time}} horas
                 </p></td>
               </tr>
