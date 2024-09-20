@@ -321,7 +321,27 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card trafic-card" title="Quantidade de tarefas por status e respectivo percentual sobre o total de tarefas filtradas">
+    <ng-template #leg10 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Quantidade total de tarefas: {{qtdTotalTarefas}}</p>
+        <p>Pendentes: {{statusTodo}}<br />Percentual = (qtdPendentes * 100) / qtdTotalTarefas<br />{{(statusTodo*100)/qtdTotalTarefas}} = ({{statusTodo}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Em andamento: {{statusAndamento}}<br />Percentual = (qtdAndamento * 100) / qtdTotalTarefas<br />{{(statusAndamento*100)/qtdTotalTarefas}} = ({{statusAndamento}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Em review: {{statusReview}}<br />Percentual = (qtdReview * 100) / qtdTotalTarefas<br />{{(statusReview*100)/qtdTotalTarefas}} = ({{statusReview}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Aguardando deploy em homologação: {{statusAguardandoDeployHomol}}<br />Percentual = (qtdAguardandoDeployHomologacao * 100) / qtdTotalTarefas<br />{{(statusAguardandoDeployHomol*100)/qtdTotalTarefas}} = ({{statusAguardandoDeployHomol}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Aguardando testes: {{statusAguardandoTeste}}<br />Percentual = (qtdAguardandoTestes * 100) / qtdTotalTarefas<br />{{(statusAguardandoTeste*100)/qtdTotalTarefas}} = ({{statusAguardandoTeste}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Em testes: {{statusTeste}}<br />Percentual = (qtdTestes * 100) / qtdTotalTarefas<br />{{(statusTeste*100)/qtdTotalTarefas}} = ({{statusTeste}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Aguardando deploy em produção: {{statusAguardandoDeployProducao}}<br />Percentual = (qtdAguardandoDeployProducao * 100) / qtdTotalTarefas<br />{{(statusAguardandoDeployProducao*100)/qtdTotalTarefas}} = ({{statusAguardandoDeployProducao}}*100)/{{qtdTotalTarefas}}</p>
+        <p>Concluídas: {{statusConcluidas}}<br />Percentual = (qtdConcluidas * 100) / qtdTotalTarefas<br />{{(statusConcluidas*100)/qtdTotalTarefas}} = ({{statusConcluidas}}*100)/{{qtdTotalTarefas}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div (click)="open(leg10)" class="card trafic-card" title="Quantidade de tarefas por status e respectivo percentual sobre o total de tarefas filtradas">
       <div class="card-header">
         <h5>Tarefas por status <span class="float-end">{{ qtdTotalTarefas }}</span></h5>
       </div>
@@ -405,7 +425,26 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="card trafic-card" title="Quantidade média (soma dos tempos dividida pela quantidade de tasks) de dias de permanência das tarefas por status (tempo em dias, não o tempo lançado)">
+    <ng-template #leg11 let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+        <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <p>Quantidade média (soma dos tempos dividida pela quantidade de tasks) de dias de permanência das tarefas por status (tempo em dias, não o tempo lançado).</p>
+        <p>Pendentes: soma(diasPorStatusPendentesTarefas) / qtdTotalTarefas<br />{{tempoStatusTodo}} = {{somaTempoTodo}} dias/{{qtdTotalTarefas}}</p>
+        <p>Em andamento: soma(diasPorStatusAndamentoTarefas) / qtdTotalTarefas<br />{{tempoStatusAndamento}} = {{somaTempoAndamento}} dias/{{qtdTotalTarefas}}</p>
+        <p>Em review: soma(diasPorStatusReviewTarefas) / qtdTotalTarefas<br />{{tempoStatusReview}} = {{somaTempoReview}} dias/{{qtdTotalTarefas}}</p>
+        <p>Aguardando deploy em homologação: soma(diasPorStatusAguardandoDeployHomologacaoTarefas) / qtdTotalTarefas<br />{{tempoStatusAguardandoDeployHomol}} = {{somaTempoAguardandoDeployHomol}} dias/{{qtdTotalTarefas}}</p>
+        <p>Aguardando testes: soma(diasPorStatusAguardandoTestesTarefas)/ qtdTotalTarefas<br />{{tempoStatusAguardandoTeste}} = {{somaTempoAguardandoTeste}} dias/{{qtdTotalTarefas}}</p>
+        <p>Em testes: soma(diasPorStatusEmTestesTarefas) / qtdTotalTarefas<br />{{tempoStatusTeste}} = {{somaTempoTeste}} dias/{{qtdTotalTarefas}}</p>
+        <p>Aguardando deploy em produção: soma(diasPorStatusAguardandoDeployProducaoTarefas) / qtdTotalTarefas<br />{{tempoStatusAguardandoDeployProducao}} = {{somaTempoAguardandoDeployProducao}} dias/{{qtdTotalTarefas}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+      </div>
+    </ng-template>
+    <div (click)="open(leg11)" class="card trafic-card" title="Quantidade média (soma dos tempos dividida pela quantidade de tasks) de dias de permanência das tarefas por status (tempo em dias, não o tempo lançado)">
       <div class="card-header">
         <h5>Tempo médio de permanência por status</h5>
       </div>

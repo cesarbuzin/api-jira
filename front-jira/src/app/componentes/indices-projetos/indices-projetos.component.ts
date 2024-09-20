@@ -95,6 +95,14 @@ export default class IndicesProjetosComponent implements OnInit {
   tempoStatusAguardandoDeployProducao = 0;
   tempoStatusConcluidas = 0;
 
+  somaTempoTodo = 0;
+  somaTempoAndamento = 0;
+  somaTempoReview = 0;
+  somaTempoAguardandoDeployHomol = 0;
+  somaTempoAguardandoTeste = 0;
+  somaTempoTeste = 0;
+  somaTempoAguardandoDeployProducao = 0;
+
   perTempoRetrabalhoDev = 0;
   perTempoRetrabalhoQa = 0;
 
@@ -206,6 +214,14 @@ export default class IndicesProjetosComponent implements OnInit {
     this.statusAguardandoDeployProducao = response.qtdPorStatus.DEPLOY_PROD??0;
     this.statusConcluidas = this.qtdTotalTarefas - this.statusTodo - this.statusAndamento - this.statusReview
       - this.statusAguardandoDeployHomol - this.statusAguardandoTeste - this.statusTeste - this.statusAguardandoDeployProducao;
+
+    this.somaTempoTodo = this.convertMsToTime(response.tempoPorStatus.TODO??0);
+    this.somaTempoAndamento = this.convertMsToTime(response.tempoPorStatus.ANDAMENTO??0);
+    this.somaTempoReview = this.convertMsToTime(response.tempoPorStatus.REVIEW??0);
+    this.somaTempoAguardandoDeployHomol = this.convertMsToTime(response.tempoPorStatus.DEPLOY_HOMOL??0);
+    this.somaTempoAguardandoTeste = this.convertMsToTime(response.tempoPorStatus.AGUARDANDO_TESTE??0);
+    this.somaTempoTeste = this.convertMsToTime(response.tempoPorStatus.TESTE??0);
+    this.somaTempoAguardandoDeployProducao = this.convertMsToTime(response.tempoPorStatus.DEPLOY_PROD??0);
 
     this.tempoMedioTotalTarefas = this.divisao(this.tempoTotalTarefas, this.qtdTotalTarefas);
     this.tempoStatusTodo = this.divisao(this.convertMsToTime(response.tempoPorStatus.TODO??0), this.qtdTotalTarefas);
@@ -353,6 +369,14 @@ export default class IndicesProjetosComponent implements OnInit {
     this.tempoAndamentoRetrabalho = 0;
     this.tempoTestes = 0;
     this.tempoTestesRetrabalho = 0;
+
+    this.somaTempoTodo = 0;
+    this.somaTempoAndamento = 0;
+    this.somaTempoReview = 0;
+    this.somaTempoAguardandoDeployHomol = 0;
+    this.somaTempoAguardandoTeste = 0;
+    this.somaTempoTeste = 0;
+    this.somaTempoAguardandoDeployProducao = 0;
 
     this.dthInicioSprint = undefined
     this.dthFimSprint = undefined
