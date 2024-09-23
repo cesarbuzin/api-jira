@@ -8,6 +8,7 @@ import { UserDTO } from './UserDTO';
 import { Router } from '@angular/router';
 import html2pdf from 'html2pdf.js';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import TaskTimelineDTO from './TaskTimelineDTO';
 
 @Component({
   selector: 'app-indices-projetos',
@@ -47,7 +48,7 @@ export default class IndicesProjetosComponent implements OnInit {
 
   projeto = '';
 
-  sprints: [] = [];
+  sprints: {ds_sprint:string, dt_inicial_sprint:Date, dt_final_sprint:Date} [] = [];
   usuarios: string[] = []
 
   filtroSprint = '';
@@ -178,16 +179,21 @@ export default class IndicesProjetosComponent implements OnInit {
     this.reset();
 
     if(this.filtroSprint !== '') {
-      const sprint:{dt_inicial_sprint:Date, dt_final_sprint:Date} = this.sprints.filter((sprint:{ds_sprint:string, dt_inicial_sprint:Date})=>sprint.ds_sprint === this.filtroSprint)[0]
+      const sprint:{ds_sprint:string, dt_inicial_sprint:Date, dt_final_sprint:Date} = this.sprints.filter((sprint:{ds_sprint:string, dt_inicial_sprint:Date})=>sprint.ds_sprint === this.filtroSprint)[0]
       this.dthInicioSprint = sprint.dt_inicial_sprint
-      this.dthFimSprint = sprint.dt_final_sprint
+
+      //if(this.sprints.length > this.sprints.indexOf(sprint)-1) {
+      //  this.dthFimSprint = this.sprints[this.sprints.indexOf(sprint)-1].dt_inicial_sprint
+      //} else {
+        this.dthFimSprint = sprint.dt_final_sprint
+      //}
     }
     
     var config = {
       headers: {'Access-Control-Allow-Origin': '*'}}
 
       this.http.get<any>(
-      `${this.url}/tasks/sprintDataTasks?project=${this.projeto}&sprint=${this.filtroSprint}&user=${this.filtroUsuario}&task=${this.filtroTask}`,config
+      `${this.url}/tasks/sprintDataTasks?project=${this.projeto}&sprint=${this.filtroSprint}&user=${this.filtroUsuario}&task=${this.filtroTask}${this.dthInicioSprint?'&dthInicio='+this.dthInicioSprint:''}${this.dthFimSprint?'&dthFim='+this.dthFimSprint:''}`,config
   ).subscribe(async (response) => {
    
     this.qtdTotalTarefas = response.qtdTarefas??0;
@@ -212,8 +218,7 @@ export default class IndicesProjetosComponent implements OnInit {
     this.statusAguardandoTeste = response.qtdPorStatus.AGUARDANDO_TESTE??0;
     this.statusTeste = response.qtdPorStatus.TESTE??0;
     this.statusAguardandoDeployProducao = response.qtdPorStatus.DEPLOY_PROD??0;
-    this.statusConcluidas = this.qtdTotalTarefas - this.statusTodo - this.statusAndamento - this.statusReview
-      - this.statusAguardandoDeployHomol - this.statusAguardandoTeste - this.statusTeste - this.statusAguardandoDeployProducao;
+    this.statusConcluidas = response.qtdPorStatus.DONE??0;
 
     this.somaTempoTodo = this.convertMsToTime(response.tempoPorStatus.TODO??0);
     this.somaTempoAndamento = this.convertMsToTime(response.tempoPorStatus.ANDAMENTO??0);
@@ -221,7 +226,7 @@ export default class IndicesProjetosComponent implements OnInit {
     this.somaTempoAguardandoDeployHomol = this.convertMsToTime(response.tempoPorStatus.DEPLOY_HOMOL??0);
     this.somaTempoAguardandoTeste = this.convertMsToTime(response.tempoPorStatus.AGUARDANDO_TESTE??0);
     this.somaTempoTeste = this.convertMsToTime(response.tempoPorStatus.TESTE??0);
-    this.somaTempoAguardandoDeployProducao = this.convertMsToTime(response.tempoPorStatus.DEPLOY_PROD??0);
+    this.somaTempoAguardandoDeployProducao = this.convertMsToTime(response.tempoPorStatus.DONE??0);
 
     this.tempoMedioTotalTarefas = this.divisao(this.tempoTotalTarefas, this.qtdTotalTarefas);
     this.tempoStatusTodo = this.divisao(this.convertMsToTime(response.tempoPorStatus.TODO??0), this.qtdTotalTarefas);
@@ -231,8 +236,7 @@ export default class IndicesProjetosComponent implements OnInit {
     this.tempoStatusAguardandoTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.AGUARDANDO_TESTE??0), this.qtdTotalTarefas);
     this.tempoStatusTeste = this.divisao(this.convertMsToTime(response.tempoPorStatus.TESTE??0), this.qtdTotalTarefas);
     this.tempoStatusAguardandoDeployProducao = this.divisao(this.convertMsToTime(response.tempoPorStatus.DEPLOY_PROD??0), this.qtdTotalTarefas);
-    this.tempoStatusConcluidas = this.tempoMedioTotalTarefas - this.tempoStatusTodo - this.tempoStatusAndamento - this.tempoStatusReview
-      - this.tempoStatusAguardandoDeployHomol - this.tempoStatusAguardandoTeste - this.tempoStatusTeste - this.tempoStatusAguardandoDeployProducao;
+    this.tempoStatusConcluidas = this.divisao(this.convertMsToTime(response.tempoPorStatus.DONE??0), this.qtdTotalTarefas);
 
     this.tempoAndamento = response.tempoPorStatus.ANDAMENTO;
     this.tempoAndamentoRetrabalho = response.tempoRetrabalhoPorStatus.ANDAMENTO;
@@ -254,6 +258,14 @@ export default class IndicesProjetosComponent implements OnInit {
       taskDto.id = task.task
       taskDto.descricao = task.data.descricao
       taskDto.status = task.data.statusAtual
+
+      for(const point of task.data.taskTimeline) {
+        var timelinePoint = new TaskTimelineDTO()
+        timelinePoint.status = point.status
+        timelinePoint.naSprint = point.naSprint
+        timelinePoint.dataHora = point.dataHora
+        taskDto.taskTimeline.push(timelinePoint)
+      }
 
       taskDto.tempoAndamento=task.data.tempoPorStatus.ANDAMENTO??0
       taskDto.tempoAndamentoRetrabalho=task.data.tempoRetrabalhoPorStatus.ANDAMENTO??0

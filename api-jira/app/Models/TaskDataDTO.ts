@@ -1,3 +1,5 @@
+import TaskTimelineDTO from "./TaskTimelineDTO"
+
 export default class TaskDataDTO {
   descricao: String
   concluida: boolean
@@ -16,4 +18,5 @@ export default class TaskDataDTO {
   tempoRetrabalhoString: String
   tempoTotalString: String
   statusAtual: String
+  taskTimeline: TaskTimelineDTO[]
 }

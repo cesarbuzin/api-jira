@@ -75,7 +75,7 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'rpa',
-    title: 'RPA',
+    title: 'RPA: Sprints',
     type: 'item',
     url: '/paginas/RPA',
     classes: 'nav-item',

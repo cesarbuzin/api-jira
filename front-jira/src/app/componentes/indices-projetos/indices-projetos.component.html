@@ -57,12 +57,58 @@
   </div>
 </div>
 
+<ng-template #leg19 let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
+    <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>Timeline das trocas de status da tarefa. Através dessa informação, é possível averiguar a quantidade de alterações entre status do board e as respecitivas datas e horas de alteração.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+  </div>
+</ng-template>
+
 <div class="row" *ngIf="buscaEfetuada && !consultando" #contentToExport>
   <div class="col-md-12">
     <div class="card"><div class="card-body">
       <h5 *ngIf="filtroSprintAplicado"><b>Sprint: </b> <label *ngIf="filtroSprintAplicado">{{filtroSprintAplicado}}: de {{dthInicioSprint | date : 'dd/MM/yyyy'}} até {{dthFimSprint | date : 'dd/MM/yyyy'}}</label><br/></h5><h5 *ngIf="filtroTaskAplicado"><b>Tarefa: </b> {{filtroTaskAplicado}}<br/></h5><h5 *ngIf="filtroUsuarioAplicado"><b>Pessoa: </b> {{filtroUsuarioAplicado}}</h5>
+    
+      <div class="table-responsive" *ngIf="filtroTaskAplicado" (click)="open(leg19)">
+        <table>
+          <tr>
+            <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
+                <br />
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === false" class="feather feed-icon icon-minus bg-light-danger" title="Fora da sprint"></i>
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
+            
+              <span style="margin: 15px !important; font-size: 15px;" *ngIf="point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
+              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
+              <p style="margin-left: 15px !important;margin-right: 15px !important;" class="m-b-5">{{point.dataHora | date : 'dd/MM/yyyy'}}</p>
+              <p style="margin-left: 15px !important;margin-right: 15px !important;"  class="m-b-5">{{point.dataHora | date : 'hh:mm:ss'}}</p>
+            </td>
+          </tr>
+        </table>
+    </div>
     </div></div>
   </div>
+
   <div class="col-md-3">
     <ng-template #leg1 let-modal>
       <div class="modal-header">
@@ -608,6 +654,49 @@
             <tbody>
               <tr *ngFor="let task of lstTasks">
 
+                <ng-template #legtask let-modal>
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLiveLabel">Timeline da tarefa {{task.id}}</h5>
+                    <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="table-responsive" (click)="open(leg19)">
+                      <table>
+                        <tr>
+                          <td align="center" *ngFor="let point of task.taskTimeline">
+                              <br />
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === false" class="feather feed-icon icon-minus bg-light-danger" title="Fora da sprint"></i>
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center" *ngFor="let point of task.taskTimeline">
+                          
+                            <span style="margin: 15px !important; font-size: 15px;" *ngIf="point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
+                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center" *ngFor="let point of task.taskTimeline">
+                            <p style="margin-left: 15px !important;margin-right: 15px !important;" class="m-b-5">{{point.dataHora | date : 'dd/MM/yyyy'}}</p>
+                            <p style="margin-left: 15px !important;margin-right: 15px !important;"  class="m-b-5">{{point.dataHora | date : 'hh:mm:ss'}}</p>
+                          </td>
+                        </tr>
+                      </table>
+                  </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
+                  </div>
+                </ng-template>
+
                 <ng-template #leg17 let-modal>
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Legenda</h5>
@@ -638,18 +727,19 @@
                   </div>
                 </ng-template>
                 
-                <td><a href="https://simlabs.atlassian.net/browse/{{task.id}}" class="m-b-10 link" target="_blank">{{task.id}}</a></td>
-                <td>{{task.descricao}}</td>
+                <td ><a href="https://simlabs.atlassian.net/browse/{{task.id}}" class="m-b-10 link" target="_blank">{{task.id}}</a><br /><br />
+                <label title="Timeline da task" class="link" (click)="open(legtask)"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-timeline-event"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 20m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M10 20h-6" /><path d="M14 20h6" /><path d="M12 15l-2 -2h-3a1 1 0 0 1 -1 -1v-8a1 1 0 0 1 1 -1h10a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-3l-2 2z" /></svg></label></td>
+                <td >{{task.descricao}}</td>
                 <td>
-                  <span *ngIf="task.status === 'TAREFAS PENDENTES'" class="badge rounded-pill bg-primary">Pendente</span>
-                  <span *ngIf="task.status === 'EM ANDAMENTO' || task.status === 'EM PROGRESSO'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+                  <span *ngIf="task.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
+                  <span *ngIf="task.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
                   <span *ngIf="task.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
-                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO || task.status === 'AGUARDANDO DEPLOY''" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+                  <span *ngIf="task.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
                   <span *ngIf="task.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
                   <span *ngIf="task.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
                   <span *ngIf="task.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
-                  <span *ngIf="task.status === 'CONCLUÍDO'" class="badge rounded-pill bg-success">Concluída</span>
-                  <span *ngIf="task.status !== 'EM PROGRESSO' && task.status !== 'AGUARDANDO DEPLOY' && task.status !== 'EM ANDAMENTO' && task.status !== 'CODE REVIEW' && task.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && task.status !== 'AGUARDANDO TESTE' && task.status !== 'EM TESTE' && task.status !== 'TAREFAS PENDENTES' && task.status !== 'CONCLUÍDO' && task.status !== 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-primary">{{task.status}}</span>
+                  <span *ngIf="task.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
+                  <span *ngIf="task.status !== 'TO DO' && task.status !== 'IN PROGRESS' && task.status !== 'CODE REVIEW' && task.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && task.status !== 'AGUARDANDO TESTE' && task.status !== 'EM TESTE' && task.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && task.status !== 'DONE'" class="badge rounded-pill bg-primary">{{task.status}}</span>
                 </td>
                 <td (click)="open(leg12)">
                   <p title="Horas lançadas pelos usuários na tarefa dentro da sprint filtrada">{{task.tempoLancadoSprint}} horas lançadas na sprint</p>

@@ -2,6 +2,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import TaskDTO from 'App/Models/TaskDTO'
 import TaskDataDTO from 'App/Models/TaskDataDTO'
 import TaskDetailsDTO from 'App/Models/TaskDetailsDTO'
+import TaskTimelineDTO from 'App/Models/TaskTimelineDTO'
 import JiraRepository from 'App/Repositories/JiraRepository'
 import axios from 'axios'
 
@@ -11,31 +12,6 @@ export default class JiraService {
   Env.get('JIRA_TOKEN')
   basicAuth = 'Basic ' + btoa(this.username + ':' + this.password)
 
-
-  public async getUserDataTasks(
-    project: String,
-    user: String,
-    dataInicial: String,
-    dataFinal: String
-  ): Promise<TaskDTO[]> {
-
-    var issues: String[] = await this.getProjectTasks(project, dataInicial, dataFinal)
-
-    var retorno: TaskDTO[] = []
-
-    for (var issue of issues) {
-      var data: TaskDataDTO = await this.getTaskData(issue, null, null)
-
-      for (var userTask of data.usuariosEnvolvidos) {
-        if (userTask.toLowerCase().indexOf(user.toLowerCase()) >= 0) {
-          retorno.push({ task: issue, data: data })
-          break
-        }
-      }
-    }
-
-    return retorno
-  }
 
   public async getProjectSprints(
     project: String | null,
@@ -80,38 +56,6 @@ export default class JiraService {
       }
 
       return response.data.id
-  }
-
-  public async getProjectTasks(
-    project: String | null,
-    dataInicial: String,
-    dataFinal: String
-  ): Promise<String[]> {
-    const headers = { Accept: 'application/json', Authorization: this.basicAuth }
-
-    var projectJql: String = project ? `project = "${project}" AND ` : ''
-    var startAt = 0
-    var lenght = null
-    var tasksList: String[] = []
-
-    while(lenght == null || lenght > 0) {
-      const url = `https://simlabs.atlassian.net/rest/api/3/search?maxResults=100&startAt=${startAt}&jql=${projectJql}statusCategoryChangedDate >= ${dataInicial} AND statusCategoryChangedDate <= ${dataFinal}`
-      var response = await axios({ method: 'get', url: url, headers: headers })
-
-      if (response.status != 200) {
-        console.log(response)
-        throw new Error('Projeto não encontrado')
-      }
-
-      response.data.issues.forEach((status: { key: String }) => {
-        tasksList.push(status.key)
-      })
-
-      startAt+=100;
-      lenght = response.data.issues.length
-    }
-
-    return tasksList
   }
 
   public async getTask(issue: String): Promise<TaskDetailsDTO> {
@@ -166,6 +110,10 @@ export default class JiraService {
     var tempoDeployProd = 0
     var qtdQA = 0
 
+    taskDetail.statusAtual = 'TO DO'
+
+    const taskTimeline:TaskTimelineDTO[] = []
+
     // To Do
     // In Progress
     // Done
@@ -178,8 +126,9 @@ export default class JiraService {
     response.data.values.forEach((element: { id: String; items: []; created: String }) => {
       element.items.forEach((item: { fieldId: String; fromString: String; toString: String }) => {
 
-        //if(dataInicioFiltro == null || dataFimFiltro == null || (dataInicioFiltro <= new Date(element.created.toString()) && dataFimFiltro >= new Date(element.created.toString()))) {
-
+        const noPeriodo = dataInicioFiltro == null || dataFimFiltro == null || (new Date(dataInicioFiltro).getTime() <= new Date(element.created.toString()).getTime() && new Date(dataFimFiltro).getTime() >= new Date(element.created.toString()).getTime());
+        const antesDoPeriodo = dataInicioFiltro == null || (new Date(dataInicioFiltro).getTime() > new Date(element.created.toString()).getTime())
+        
           if (item.toString != null && item.fieldId == 'assignee') {
            
             if (
@@ -204,6 +153,21 @@ export default class JiraService {
               item.toString = 'Done';
             }
 
+            var timelinePoint = new TaskTimelineDTO()
+            timelinePoint.status = item.toString.toUpperCase()
+            timelinePoint.naSprint = noPeriodo
+            timelinePoint.dataHora = new Date(element.created.toString())
+            taskTimeline.push(timelinePoint)
+
+            if(antesDoPeriodo) {
+              taskDetail.statusAtual = item.toString.toUpperCase()
+
+              if (item.toString.toUpperCase() == 'DONE') {
+                dataFim = new Date(element.created.toString())
+                done = true
+              }
+            }
+
             if (item.toString.toUpperCase() == 'IN PROGRESS') {
               if (firstProgress) {
                 tempoTotal = new Date(element.created.toString()).getTime()
@@ -212,7 +176,9 @@ export default class JiraService {
                 if (tempoRetrabalho == 0) {
                   tempoRetrabalho = new Date(element.created.toString()).getTime()
                 }
+                if(noPeriodo) {
                 qtdRetrabalho++
+                }
               }
             } else if (item.toString.toUpperCase() == 'AGUARDANDO DEPLOY PRODUÇÃO' && tempoRetrabalho > 0) {
               tempoDeployProd = new Date(element.created.toString()).getTime()
@@ -220,33 +186,41 @@ export default class JiraService {
               dataFim = new Date(element.created.toString())
               done = true
             } else if (item.toString.toUpperCase() == 'EM TESTE') {
+              if(noPeriodo) {
               qtdQA++;
-            }
-
-            var timeIn = 0
-            timeIn = new Date(element.created.toString()).getTime() - lastTime
-            lastTime = new Date(element.created.toString()).getTime()
-            var tempoStatus = mapTempos.get(item.fromString.toUpperCase())
-            if (!tempoStatus) {
-              tempoStatus = 0
-            }
-            mapTempos.set(item.fromString.toUpperCase(), tempoStatus + timeIn)
-
-            if(tempoRetrabalho > 0) {
-              if (((item.toString.toUpperCase() == 'EM TESTE' || item.toString.toUpperCase() == 'AGUARDANDO TESTE') && qtdQA > 1) || (item.toString.toUpperCase() != 'EM TESTE' && item.toString.toUpperCase() != 'AGUARDANDO TESTE')) {
-                var tempoStatus = mapTemposRetrabalho.get(item.fromString.toUpperCase())
-                if (!tempoStatus) {
-                  tempoStatus = 0
-                }
-                mapTemposRetrabalho.set(item.fromString.toUpperCase(), tempoStatus + timeIn)
               }
             }
 
-            listHist.push({ STATUS: item.fromString, TEMPO: timeIn, TEMPO_STRING: this.convertMsToTime(timeIn) })
+            if(noPeriodo) {
+
+              taskDetail.statusAtual = item.toString.toUpperCase()
+
+              var timeIn = 0
+              timeIn = new Date(element.created.toString()).getTime() - lastTime
+              lastTime = new Date(element.created.toString()).getTime()
+              var tempoStatus = mapTempos.get(item.fromString.toUpperCase())
+              if (!tempoStatus) {
+                tempoStatus = 0
+              }
+              mapTempos.set(item.fromString.toUpperCase(), tempoStatus + timeIn)
+
+              if(tempoRetrabalho > 0) {
+                if (((item.fromString.toUpperCase() == 'EM TESTE' || item.fromString.toUpperCase() == 'AGUARDANDO TESTE') && qtdQA > 1) || (item.fromString.toUpperCase() != 'EM TESTE' && item.fromString.toUpperCase() != 'AGUARDANDO TESTE')) {
+                  var tempoStatus = mapTemposRetrabalho.get(item.fromString.toUpperCase())
+                  if (!tempoStatus) {
+                    tempoStatus = 0
+                  }
+                  mapTemposRetrabalho.set(item.fromString.toUpperCase(), tempoStatus + timeIn)
+                }
+              }
+
+              listHist.push({ STATUS: item.fromString, TEMPO: timeIn, TEMPO_STRING: this.convertMsToTime(timeIn) })
+            }
           }
-        //}
       })
     })
+
+    
 
     if (!done) {
       tempoTotal = new Date().getTime() - tempoTotal
@@ -318,202 +292,8 @@ export default class JiraService {
       tempoPorStatus: tempoPorStatus,
       tempoPorStatusString: tempoPorStatusString,
       historicoCompleto: listHist,
+      taskTimeline: taskTimeline
     }
-  }
-
-  async projectDataTasks(project: String,user:String|null, dataInicial:String, dataFinal:String) {
-
-    var tasksList: String[] = await new JiraService().getProjectTasks(project, dataInicial, dataFinal);
-
-    var tasks:TaskDTO[] = [];
-
-    var dataInicioFiltro = new Date(dataInicial.toString());
-    var dataFimFiltro = new Date(dataFinal.toString());
-
-    var qtdTarefas = 0;
-    var qtdTarefasRetrabalho = 0;
-    var qtdTarefasBugs = 0;
-    var qtdTarefasBugsRetrabalho = 0
-    var qtdTarefasMelhoria = 0;
-    var qtdTarefasMelhoriaRetrabalho = 0;
-    var tempoTarefasBugs = 0
-    var tempoTarefasMelhoria = 0
-    var tempoTarefas = 0
-    var tempoRetrabalho = 0
-    var tempoRetrabalhoTarefasBug = 0
-    var tempoRetrabalhoTarefasMelhoria = 0
-    var tempoPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0}
-    var tempoPorStatusString= {}
-    var tempoRetrabalhoPorStatus= {TODO:0, ANDAMENTO:0,REVIEW:0, DEPLOY_HOMOL:0,AGUARDANDO_TESTE:0,TESTE:0,DEPLOY_PROD:0}
-    var tempoRetrabalhoPorStatusString= {}
-    var qtdRetornosTarefas = 0;
-    var qtdConcluidas = 0;
-
-    var tempoPorStatusTODO = 0
-    var tempoPorStatusANDAMENTO = 0
-    var tempoPorStatusREVIEW = 0
-    var tempoPorStatusDEPLOY_HOMOL = 0
-    var tempoPorStatusAGUARDANDO_TESTE = 0
-    var tempoPorStatusTESTE = 0
-    var tempoPorStatusDEPLOY_PROD = 0
-
-    var tempoRetrabalhoPorStatusTODO = 0
-    var tempoRetrabalhoPorStatusANDAMENTO = 0
-    var tempoRetrabalhoPorStatusREVIEW = 0
-    var tempoRetrabalhoPorStatusDEPLOY_HOMOL = 0
-    var tempoRetrabalhoPorStatusAGUARDANDO_TESTE = 0
-    var tempoRetrabalhoPorStatusTESTE = 0
-    var tempoRetrabalhoPorStatusDEPLOY_PROD = 0
-
-    var lstUsuarios:String[] = []
-
-    for(const task of tasksList) {
-      var data: TaskDataDTO = await new JiraService().getTaskData(task, dataInicioFiltro, dataFimFiltro)
-
-      if(user && !data.usuariosEnvolvidos.includes(user.toString())) {
-        continue;
-      }
-
-      var userPartTask = false;
-      for (var userTask of data.usuariosEnvolvidos) {
-        if(user != null) {
-          if (userTask.toLowerCase().indexOf(user.toLowerCase()) >= 0) {
-            if(!lstUsuarios.includes(userTask)) {
-              lstUsuarios.push(userTask)
-            }
-            userPartTask = true;
-            break
-          }
-        } else {
-          if(!lstUsuarios.includes(userTask)) {
-            lstUsuarios.push(userTask)
-          }
-        }
-      }
-      if(user === null) {
-        userPartTask = true;
-      }
-
-      if(userPartTask) {
-        tasks.push({task: task, data: data});
-
-        qtdTarefas++;
-
-        if(data.quantidadeRetornos > 0) {
-          qtdTarefasRetrabalho++;
-        }
-
-        qtdRetornosTarefas += data.quantidadeRetornos;
-
-        if(data.concluida) {
-          qtdConcluidas++;
-        }
-
-        if(data.tipo === 'Bug') {
-          qtdTarefasBugs++;
-          tempoTarefasBugs+= data.tempoTotal
-          tempoRetrabalhoTarefasBug+= data.tempoRetrabalho
-          if(data.quantidadeRetornos > 0) {
-          qtdTarefasBugsRetrabalho++;
-        }
-        } else {
-          qtdTarefasMelhoria++;
-          tempoTarefasMelhoria+= data.tempoTotal
-          tempoRetrabalhoTarefasMelhoria = data.tempoRetrabalho;
-          if(data.quantidadeRetornos > 0) {
-            qtdTarefasMelhoriaRetrabalho++;
-          }
-        }
-
-        tempoTarefas += data.tempoTotal
-        tempoRetrabalho += data.tempoRetrabalho
-        tempoPorStatusTODO += data.tempoPorStatus.TODO??0
-        tempoPorStatusANDAMENTO += data.tempoPorStatus.ANDAMENTO??0
-        tempoPorStatusREVIEW += data.tempoPorStatus.REVIEW??0
-        tempoPorStatusDEPLOY_HOMOL += data.tempoPorStatus.DEPLOY_HOMOL??0
-        tempoPorStatusAGUARDANDO_TESTE += data.tempoPorStatus.AGUARDANDO_TESTE??0
-        tempoPorStatusTESTE += data.tempoPorStatus.TESTE??0
-        tempoPorStatusDEPLOY_PROD += data.tempoPorStatus.DEPLOY_PROD??0
-
-        tempoRetrabalhoPorStatusTODO += data.tempoRetrabalhoPorStatus.TODO??0
-        tempoRetrabalhoPorStatusANDAMENTO += data.tempoRetrabalhoPorStatus.ANDAMENTO??0
-        tempoRetrabalhoPorStatusREVIEW += data.tempoRetrabalhoPorStatus.REVIEW??0
-        tempoRetrabalhoPorStatusDEPLOY_HOMOL += data.tempoRetrabalhoPorStatus.DEPLOY_HOMOL??0
-        tempoRetrabalhoPorStatusAGUARDANDO_TESTE += data.tempoRetrabalhoPorStatus.AGUARDANDO_TESTE??0
-        tempoRetrabalhoPorStatusTESTE += data.tempoRetrabalhoPorStatus.TESTE??0
-        tempoRetrabalhoPorStatusDEPLOY_PROD += data.tempoRetrabalhoPorStatus.DEPLOY_PROD??0
-      }
-    }
-
-    tempoPorStatus= {TODO:tempoPorStatusTODO,
-      ANDAMENTO:tempoPorStatusANDAMENTO,
-      REVIEW:tempoPorStatusREVIEW,
-      DEPLOY_HOMOL:tempoPorStatusDEPLOY_HOMOL,
-      AGUARDANDO_TESTE:tempoPorStatusAGUARDANDO_TESTE,
-      TESTE:tempoPorStatusTESTE,
-      DEPLOY_PROD:tempoPorStatusDEPLOY_PROD}
-
-    tempoPorStatusString= {TODO:new JiraService().convertMsToTime(tempoPorStatus.TODO),
-      ANDAMENTO:new JiraService().convertMsToTime(tempoPorStatus.ANDAMENTO),
-      REVIEW:new JiraService().convertMsToTime(tempoPorStatus.REVIEW),
-      DEPLOY_HOMOL:new JiraService().convertMsToTime(tempoPorStatus.DEPLOY_HOMOL),
-      AGUARDANDO_TESTE:new JiraService().convertMsToTime(tempoPorStatus.AGUARDANDO_TESTE),
-      TESTE:new JiraService().convertMsToTime(tempoPorStatus.TESTE),
-      DEPLOY_PROD:new JiraService().convertMsToTime(tempoPorStatus.DEPLOY_PROD),}
-
-      tempoRetrabalhoPorStatus= {TODO:tempoRetrabalhoPorStatusTODO,
-        ANDAMENTO:tempoRetrabalhoPorStatusANDAMENTO,
-        REVIEW:tempoRetrabalhoPorStatusREVIEW,
-        DEPLOY_HOMOL:tempoRetrabalhoPorStatusDEPLOY_HOMOL,
-        AGUARDANDO_TESTE:tempoRetrabalhoPorStatusAGUARDANDO_TESTE,
-        TESTE:tempoRetrabalhoPorStatusTESTE,
-        DEPLOY_PROD:tempoRetrabalhoPorStatusDEPLOY_PROD}
-
-    tempoRetrabalhoPorStatusString= {TODO:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.TODO),
-        ANDAMENTO:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.ANDAMENTO),
-        REVIEW:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.REVIEW),
-        DEPLOY_HOMOL:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.DEPLOY_HOMOL),
-        AGUARDANDO_TESTE:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.AGUARDANDO_TESTE),
-        TESTE:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.TESTE),
-        DEPLOY_PROD:new JiraService().convertMsToTime(tempoRetrabalhoPorStatus.DEPLOY_PROD),}
-
-    var indices = {
-    percentualTempoBugs: (tempoTarefasBugs * 100) / tempoTarefas,
-    percentualRetrabalhoDev: (tempoRetrabalhoPorStatus.ANDAMENTO * 100) / tempoPorStatus.ANDAMENTO,
-    percentualTempoEsperaReviewTecnico: (tempoRetrabalhoPorStatus.REVIEW * 100) / tempoTarefas,
-    percentualTempoEsperaDev: (tempoRetrabalhoPorStatus.TODO * 100) / tempoTarefas,
-    percentualTempoEsperaQa: (tempoRetrabalhoPorStatus.AGUARDANDO_TESTE * 100) / tempoTarefas,
-    percentualRetrabalhoQa: (tempoRetrabalhoPorStatus.TESTE * 100) / tempoPorStatus.TESTE,
-  }
-
-    return {
-      usuarios: lstUsuarios,
-      indices: indices,
-      qtdTarefas: qtdTarefas,
-      qtdConcluidas: qtdConcluidas,
-      qtdTarefasRetrabalho: qtdTarefasRetrabalho,
-      qtdTarefasBugs: qtdTarefasBugs,
-      qtdTarefasMelhoria: qtdTarefasMelhoria,
-      qtdTarefasBugsRetrabalho: qtdTarefasBugsRetrabalho,
-      qtdTarefasMelhoriaRetrabalho: qtdTarefasMelhoriaRetrabalho,
-      qtdRetornosTarefas: qtdRetornosTarefas,
-      tempoTarefas: tempoTarefas,
-      tempoRetrabalho: tempoRetrabalho,
-      tempoTarefasBugs: tempoTarefasBugs,
-      tempoTarefasMelhoria: tempoTarefasMelhoria,
-      tempoRetrabalhoTarefasBug: tempoRetrabalhoTarefasBug,
-      tempoRetrabalhoTarefasMelhoria: tempoRetrabalhoTarefasMelhoria,
-      tempoTarefasString: new JiraService().convertMsToTime(tempoTarefas),
-      tempoRetrabalhoString: new JiraService().convertMsToTime(tempoRetrabalho),
-      tempoTarefasBugsString: new JiraService().convertMsToTime(tempoTarefasBugs),
-      tempoTarefasMelhoriaString: new JiraService().convertMsToTime(tempoTarefasMelhoria),
-      tempoRetrabalhoTarefasBugString: new JiraService().convertMsToTime(tempoRetrabalhoTarefasBug),
-      tempoRetrabalhoTarefasMelhoriaString: new JiraService().convertMsToTime(tempoRetrabalhoTarefasMelhoria),
-      tempoPorStatus: tempoPorStatus,
-      tempoPorStatusString: tempoPorStatusString,
-      tempoRetrabalhoPorStatus: tempoRetrabalhoPorStatus,
-      tempoRetrabalhoPorStatusString: tempoRetrabalhoPorStatusString,
-      tasks: tasks,};
   }
 
   convertMsToTime(milliseconds:number ) {
@@ -608,7 +388,7 @@ export default class JiraService {
     return tasksList
   }
 
-  async sprintDataTasks(project: String,user:String|null, sprint:String|null, task:String|null) {
+  async sprintDataTasks(project: String,user:String|null, sprint:String|null, task:String|null, dthInicio: Date|null, dthFim: Date|null) {
 
     var tasksList: String[] = await new JiraService().getSprintTasks(project, sprint, task);
     var tasks:TaskDTO[] = [];
@@ -652,15 +432,15 @@ export default class JiraService {
     var lstUsuarios: String[] = []
     
     for(const task of tasksList) {
-      var data: TaskDataDTO = await new JiraService().getTaskData(task, null, null)
+      var data: TaskDataDTO = await new JiraService().getTaskData(task, dthInicio, dthFim)
 
       if(user && !data.usuariosEnvolvidos.includes(user.toString())) {
         continue;
       }
-     
-      if(data.statusAtual === 'TAREFAS PENDENTES')
+
+      if(data.statusAtual === 'TO DO')
         qtdPorStatus.TODO = qtdPorStatus.TODO+1
-      if(data.statusAtual === 'EM ANDAMENTO'  || data.statusAtual === 'EM PROGRESSO')
+      if(data.statusAtual === 'IN PROGRESS')
         qtdPorStatus.ANDAMENTO = qtdPorStatus.ANDAMENTO+1
       if(data.statusAtual === 'CODE REVIEW')
         qtdPorStatus.REVIEW = qtdPorStatus.REVIEW+1
@@ -672,7 +452,7 @@ export default class JiraService {
         qtdPorStatus.TESTE = qtdPorStatus.TESTE+1
       if(data.statusAtual === 'AGUARDANDO DEPLOY PRODUÇÃO'  || data.statusAtual === 'AGUARDANDO DEPLOY')
         qtdPorStatus.DEPLOY_PROD = qtdPorStatus.DEPLOY_PROD+1
-      if(data.statusAtual === 'CONCLUÍDO')
+      if(data.statusAtual === 'DONE')
         qtdPorStatus.DONE = qtdPorStatus.DONE+1
 
       var userPartTask = false;

@@ -9,21 +9,6 @@ export default class TasksController {
 
   jiraService = new JiraService();
 
-  public async projectTasks({ request }: HttpContextContract): Promise<{tasks: String[]}| ErroDTO> {
-
-    try {
-      const project = request.input('project')
-      const dataInicial = request.input('dataInicial')
-      const dataFinal = request.input('dataFinal')
-
-      var tasksList: String[] = await this.jiraService.getProjectTasks(project, dataInicial, dataFinal);
-
-      return {tasks: tasksList};
-    } catch (error) {
-      return{mensagemErro: error.mensagem}
-    }
-  }
-
   public async projectSprints({ request }: HttpContextContract): Promise<{sprints: String[]}| ErroDTO> {
 
     try {
@@ -89,27 +74,15 @@ export default class TasksController {
 
     try {
     const issue = request.input('issue')
+    const dthInicio = request.input('dthInicio')
+    const dthFim = request.input('dthFim')
 
 
-    return await this.jiraService.getTaskData(issue, null, null);
+    return await this.jiraService.getTaskData(issue, dthInicio, dthFim);
   } catch (error) {
     return{mensagemErro: error.mensagem}
   }
   }
-
-  public async projectDataTasks({ request }: HttpContextContract): Promise<ProjectDataDTO| ErroDTO> {
-
-    try {
-      const project = request.input('project')
-      const dataInicial = request.input('dataInicial')
-      const dataFinal = request.input('dataFinal')
-
-      return this.jiraService.projectDataTasks(project, null, dataInicial, dataFinal)
-    } catch (error) {
-      return{mensagemErro: error.mensagem}
-    }
-  }
-  
 
   public async sprintDataTasks({ request }: HttpContextContract): Promise<ProjectDataDTO| ErroDTO> {
 
@@ -118,8 +91,10 @@ export default class TasksController {
       const sprint = request.input('sprint')
       const user = request.input('user')
       const task = request.input('task')
+      const dthInicio = request.input('dthInicio')
+      const dthFim = request.input('dthFim')
 
-      return this.jiraService.sprintDataTasks(project, user, sprint, task)
+      return this.jiraService.sprintDataTasks(project, user, sprint, task, dthInicio, dthFim)
     } catch (error) {
       return{mensagemErro: error.mensagem}
     }
@@ -131,20 +106,6 @@ export default class TasksController {
       const sprints = request.input('sprints')
 
       return this.jiraService.sprintActualTasks(sprints)
-    } catch (error) {
-      return{mensagemErro: error.mensagem}
-    }
-  }
-
-  public async userDataTasks({ request }: HttpContextContract): Promise<ProjectDataDTO| ErroDTO> {
-
-    try {
-      const project = request.input('project')
-      const user = request.input('user')
-      const dataInicial = request.input('dataInicial')
-      const dataFinal = request.input('dataFinal')
-
-      return await this.jiraService.projectDataTasks(project, user, dataInicial, dataFinal);
     } catch (error) {
       return{mensagemErro: error.mensagem}
     }

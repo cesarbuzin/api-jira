@@ -1,3 +1,4 @@
+import TaskTimelineDTO from "./TaskTimelineDTO"
 import { UserDTO } from "./UserDTO"
 
 export class TaskDTO {
@@ -17,4 +18,5 @@ export class TaskDTO {
     tempoAndamentoRetrabalho:number|undefined
     tempoTeste:number|undefined
     tempoTesteRetrabalho:number|undefined
+    taskTimeline: TaskTimelineDTO[] = []
 }
