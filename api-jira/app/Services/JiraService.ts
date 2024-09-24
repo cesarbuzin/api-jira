@@ -123,6 +123,8 @@ export default class JiraService {
     // Code Review
     // Aguardando Deploy Produção
 
+    let lastStatus = 'TO DO'
+
     response.data.values.forEach((element: { id: String; items: []; created: String }) => {
       element.items.forEach((item: { fieldId: String; fromString: String; toString: String }) => {
 
@@ -160,6 +162,8 @@ export default class JiraService {
             if('CONCLUÍDO' === item.toString.toUpperCase()){
               item.toString = 'Done';
             }
+
+            lastStatus = item.toString.toUpperCase()
 
             var timelinePoint = new TaskTimelineDTO()
             timelinePoint.status = item.toString.toUpperCase()
@@ -235,6 +239,30 @@ export default class JiraService {
       tempoTotal = new Date().getTime() - tempoTotal
       if(tempoRetrabalho > 0) {
         tempoRetrabalho = new Date().getTime() - tempoRetrabalho;
+      }
+
+      // VERIFICAÇÃO DO TEMPO DO STATUS ATUAL CASO NÃO TENHA CONCLUÍDO
+      {
+        taskDetail.statusAtual = lastStatus
+
+        var timeIn = 0
+        timeIn = new Date().getTime() - lastTime
+        lastTime = new Date().getTime()
+        var tempoStatus = mapTempos.get(lastStatus)
+        if (!tempoStatus) {
+          tempoStatus = 0
+        }
+        mapTempos.set(lastStatus, tempoStatus + timeIn)
+
+        if(tempoRetrabalho > 0) {
+          if (((lastStatus == 'EM TESTE' || lastStatus == 'AGUARDANDO TESTE') && qtdQA > 1) || (lastStatus != 'EM TESTE' && lastStatus != 'AGUARDANDO TESTE')) {
+            var tempoStatus = mapTemposRetrabalho.get(lastStatus)
+            if (!tempoStatus) {
+              tempoStatus = 0
+            }
+            mapTemposRetrabalho.set(lastStatus, tempoStatus + timeIn)
+          }
+        }
       }
     } else {
       tempoRetrabalho = tempoDeployProd - tempoRetrabalho;

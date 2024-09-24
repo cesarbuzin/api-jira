@@ -63,7 +63,7 @@
     <button type="button" class="btn-close" aria-label="Fechar" (click)="modal.close('Close click')"></button>
   </div>
   <div class="modal-body">
-    <p>Timeline das trocas de status da tarefa. Através dessa informação, é possível averiguar a quantidade de alterações entre status do board e as respecitivas datas e horas de alteração.</p>
+    <p>Timeline das trocas de status da tarefa. Através dessa informação, é possível averiguar a quantidade de alterações entre status do board, as respecitivas datas e horas de alteração e as alterações de responsáveis pela tarefa.</p>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
@@ -164,8 +164,9 @@
       </div>
       <div class="modal-body">
         <p>Percentual da soma dos tempos que as tarefas ficaram em andamento após serem reprovadas (review ou testes) sobre a soma do tempo total que as tarefas ficaram em andamento.</p>
+        <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
         <p>percentual = (soma(tempoTarefasAndamentoAposReprovadas) * 100) / soma(tempoTarefasAndamento)</p>
-        <p>{{(tempoAndamentoRetrabalho*100)/tempoAndamento}} = ({{tempoAndamentoRetrabalho}}ms * 100) / {{tempoAndamento}}ms</p>
+        <p>{{tempoAndamento === 0 ? 0 : (tempoAndamentoRetrabalho*100)/tempoAndamento}} = ({{tempoAndamentoRetrabalho}}ms * 100) / {{tempoAndamento}}ms</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
@@ -187,8 +188,9 @@
       </div>
       <div class="modal-body">
         <p>Percentual da soma dos tempos que as tarefas ficaram em testes após serem reprovadas pelos testes sobre a soma tempo total que as tarefas ficaram em testes.</p>
+        <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
         <p>percentual = (soma(tempoTarefasTesteAposReprovadas) * 100) / soma(tempoTarefasTeste)</p>
-        <p>{{(tempoTestesRetrabalho*100)/tempoTestes}} = ({{tempoTestesRetrabalho}}ms * 100) / {{tempoTestes}}ms</p>
+        <p>{{tempoTestes === 0 ? 0 : (tempoTestesRetrabalho*100)/tempoTestes}} = ({{tempoTestesRetrabalho}}ms * 100) / {{tempoTestes}}ms</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="modal.close('Close click')"> Fechar </button>
@@ -609,6 +611,7 @@
             </div>
             <div class="modal-body">
               <p>Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento.</p>
+              <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
               <p>Percentual = (tempoAndamentoAposRetorno * 100) / tempoAndamento</p>
             </div>
             <div class="modal-footer">
@@ -623,6 +626,7 @@
             </div>
             <div class="modal-body">
               <p>Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes.</p>
+              <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
               <p>Percentual = (tempoTestesAposRetorno * 100) / tempoTestes</p>
             </div>
             <div class="modal-footer">
@@ -678,7 +682,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
+                          <td align="center" *ngFor="let point of task.taskTimeline">
                             <span style="margin-top: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 1" class="badge bg-light">Alteração de status:</span>
                             <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
                             <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
@@ -714,6 +718,7 @@
                   </div>
                   <div class="modal-body">
                     <p>Percentual do tempo em andamento após retornar da revisão ou dos testes sobre o tempo total em andamento.</p>
+                    <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
                     <p>Percentual = (tempoAndamentoAposRetorno * 100) / tempoAndamento</p>
                     <p>{{task.tempoAndamento>0?((task.tempoAndamentoRetrabalho * 100)/task.tempoAndamento):0}} = ({{task.tempoAndamentoRetrabalho}} * 100) / {{task.tempoAndamento}}</p>
                   </div>
@@ -729,6 +734,7 @@
                   </div>
                   <div class="modal-body">
                     <p>Percentual do tempo em testes após retornar dos testes sobre o tempo total em testes.</p>
+                    <p>São considerados no cálculo apenas os tempos lançados na sprint selecionada. Se nenhuma sprint for selecionada, são utilizados todos os tempos da tarefa.</p>
                     <p>Percentual = (tempoTestesAposRetorno * 100) / tempoTestes</p>
                     <p>{{task.tempoTeste>0?((task.tempoTesteRetrabalho * 100)/task.tempoTeste):0}} = ({{task.tempoTesteRetrabalho}} * 100) / {{task.tempoTeste}}</p>
                   </div>
