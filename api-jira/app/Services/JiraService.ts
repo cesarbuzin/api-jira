@@ -241,8 +241,10 @@ export default class JiraService {
         tempoRetrabalho = new Date().getTime() - tempoRetrabalho;
       }
 
+      const noPeriodo = dataInicioFiltro == null || dataFimFiltro == null || (new Date(dataInicioFiltro).getTime() <= new Date().getTime() && new Date(dataFimFiltro).getTime() >= new Date().getTime());
+
       // VERIFICAÇÃO DO TEMPO DO STATUS ATUAL CASO NÃO TENHA CONCLUÍDO
-      {
+      if(noPeriodo){
         taskDetail.statusAtual = lastStatus
 
         var timeIn = 0
