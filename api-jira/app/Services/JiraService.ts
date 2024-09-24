@@ -138,6 +138,14 @@ export default class JiraService {
             ) {
               listUsuariosEnvolvidos.push(item.toString.toString())
             }
+
+            var timelinePoint = new TaskTimelineDTO()
+            timelinePoint.status = `${item.toString.toString()}`
+            timelinePoint.naSprint = noPeriodo
+            timelinePoint.dataHora = new Date(element.created.toString())
+            timelinePoint.intTipo = 2
+            taskTimeline.push(timelinePoint)
+            
           } else if (item.fieldId == 'status') {
 
             if('BACKLOG' === item.toString.toUpperCase()) {
@@ -157,6 +165,7 @@ export default class JiraService {
             timelinePoint.status = item.toString.toUpperCase()
             timelinePoint.naSprint = noPeriodo
             timelinePoint.dataHora = new Date(element.created.toString())
+            timelinePoint.intTipo = 1
             taskTimeline.push(timelinePoint)
 
             if(antesDoPeriodo) {

@@ -80,22 +80,27 @@
           <tr>
             <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
                 <br />
-                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === false" class="feather feed-icon icon-minus bg-light-danger" title="Fora da sprint"></i>
-                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 1 && point.naSprint === false" class="feather feed-icon icon-check bg-light-danger" title="Fora da sprint"></i>
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 1 && point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 2 && point.naSprint === false" class="feather feed-icon icon-user bg-light-danger" title="Fora da sprint"></i>
+                <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 2 && point.naSprint === true"  class="feather feed-icon icon-user bg-light-success" title="Na sprint (se filtrada)"></i>
             </td>
           </tr>
           <tr>
             <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
-            
-              <span style="margin: 15px !important; font-size: 15px;" *ngIf="point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
-              <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+              <span style="margin-top: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 1" class="badge bg-light">Alteração de status:</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
+              <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+              <span style="margin-top: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 2" class="badge bg-light">Alteração de usuário:</span>
+              <span style="margin-bottom: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 2" class="badge bg-light">{{point.status}}</span>
             </td>
           </tr>
           <tr>
@@ -665,22 +670,27 @@
                         <tr>
                           <td align="center" *ngFor="let point of task.taskTimeline">
                               <br />
-                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === false" class="feather feed-icon icon-minus bg-light-danger" title="Fora da sprint"></i>
-                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 1 && point.naSprint === false" class="feather feed-icon icon-check bg-light-danger" title="Fora da sprint"></i>
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 1 && point.naSprint === true"  class="feather feed-icon icon-check bg-light-success" title="Na sprint (se filtrada)"></i>
+
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 2 && point.naSprint === false" class="feather feed-icon icon-user bg-light-danger" title="Fora da sprint"></i>
+                              <i style="margin-left: 15px !important;margin-right: 15px !important;" *ngIf="point.intTipo === 2 && point.naSprint === true"  class="feather feed-icon icon-user bg-light-success" title="Na sprint (se filtrada)"></i>
                           </td>
                         </tr>
                         <tr>
-                          <td align="center" *ngFor="let point of task.taskTimeline">
-                          
-                            <span style="margin: 15px !important; font-size: 15px;" *ngIf="point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
-                            <span style="margin: 15px !important;font-size: 15px;" *ngIf="point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+                          <td align="center" *ngFor="let point of lstTasks[0].taskTimeline">
+                            <span style="margin-top: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 1" class="badge bg-light">Alteração de status:</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'TO DO'" class="badge rounded-pill bg-primary">Pendente</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'IN PROGRESS'" class="badge rounded-pill bg-warning text-dark">Em andamento</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'CODE REVIEW'" class="badge rounded-pill bg-warning text-dark">Em review</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO DEPLOY HOMOLOGAÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em homologação</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO TESTE'" class="badge rounded-pill bg-danger">Aguardando testes</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'EM TESTE'" class="badge rounded-pill bg-warning text-dark">Em testes</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'AGUARDANDO DEPLOY PRODUÇÃO'" class="badge rounded-pill bg-danger">Aguardando deploy em produção</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status === 'DONE'" class="badge rounded-pill bg-success">Concluída</span>
+                            <span style="margin-left: 15px !important;margin-right: 15px !important;margin-bottom: 15px !important; font-size: 15px;" *ngIf="point.intTipo === 1 && point.status !== 'TO DO' && point.status !== 'IN PROGRESS' && point.status !== 'CODE REVIEW' && point.status !== 'AGUARDANDO DEPLOY HOMOLOGAÇÃO' && point.status !== 'AGUARDANDO TESTE' && point.status !== 'EM TESTE' && point.status !== 'AGUARDANDO DEPLOY PRODUÇÃO' && point.status !== 'DONE'" class="badge rounded-pill bg-primary">{{point.status}}</span>
+                            <span style="margin-top: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 2" class="badge bg-light">Alteração de usuário:</span>
+                            <span style="margin-bottom: 15px !important;font-size: 15px;color:black;" *ngIf="point.intTipo === 2" class="badge bg-light">{{point.status}}</span>
                           </td>
                         </tr>
                         <tr>

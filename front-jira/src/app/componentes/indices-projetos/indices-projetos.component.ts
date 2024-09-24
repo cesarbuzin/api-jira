@@ -264,6 +264,7 @@ export default class IndicesProjetosComponent implements OnInit {
         timelinePoint.status = point.status
         timelinePoint.naSprint = point.naSprint
         timelinePoint.dataHora = point.dataHora
+        timelinePoint.intTipo = point.intTipo
         taskDto.taskTimeline.push(timelinePoint)
       }
 
